@@ -1,11 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import { UserRouter } from "./routes";
 
-const app = express();
-app.use(cors());
+mongoose.connect("mongodb://localhost:27017/node-api");
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+const server = express();
+server.use(cors());
 
-app.listen(3001);
+server.use(express.urlencoded({ extended: true }));
+server.use(express.json());
+
+server.use(UserRouter);
+
+server.listen(3001);
