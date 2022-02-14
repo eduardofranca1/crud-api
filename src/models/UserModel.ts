@@ -8,13 +8,15 @@ export interface UserDocument extends IUser, Document {
 
 const userSchema = new Schema(
   {
-    name: String,
-    email: String,
-    password: String,
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true, select: false },
   },
   {
     timestamps: true,
   }
 );
 
-export default model("users", userSchema);
+const User = model("users", userSchema);
+
+export default User;
