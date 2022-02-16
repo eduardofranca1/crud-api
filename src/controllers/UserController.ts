@@ -3,9 +3,15 @@ import { UserSchema, UserSchemaQuery } from "../schemas/UserSchema";
 import UserService from "../services/UserService";
 
 class UserController {
-  async create(request: Request<{}, UserSchema["body"]>, response: Response) {
+  async create(
+    request: Request<{}, {}, UserSchema["body"]>,
+    response: Response
+  ) {
     try {
-      const newUser = await UserService.createUser(request.body);
+      const { body } = request;
+      const bodyValidator: any = body;
+
+      const newUser = await UserService.createUser(bodyValidator);
       return response.status(201).json(newUser);
     } catch (error: any) {
       if (error.code) return response.status(error.code).json(error.message);
@@ -39,7 +45,7 @@ class UserController {
   }
 
   async updateUser(
-    request: Request<{}, UserSchema["body"]>,
+    request: Request<{}, {}, UserSchema["body"]>,
     response: Response
   ) {
     try {
