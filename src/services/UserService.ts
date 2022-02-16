@@ -57,7 +57,18 @@ class UserService {
 
       if (!user) throw new CustomException("Not found", HttpStatus.NOT_FOUND);
 
+      if (user.email !== update.email) {
+        const emailExists = await User.findOne({ email: update.email });
+        if (emailExists) {
+          throw new CustomException(
+            "Email already exists",
+            HttpStatus.BAD_REQUEST
+          );
+        }
+      }
+
       const updatedUser = await User.findOneAndUpdate(query, update, options);
+
       return updatedUser;
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
