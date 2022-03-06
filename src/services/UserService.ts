@@ -67,7 +67,7 @@ class UserService {
         }
       }
 
-      const updatedUser = await User.findOneAndUpdate(query, update, options);
+      const updatedUser = await User.updateOne(query, update, options);
 
       return updatedUser;
     } catch (error: any) {
