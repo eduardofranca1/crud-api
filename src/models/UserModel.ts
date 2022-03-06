@@ -1,10 +1,11 @@
 import { Schema, model } from "mongoose";
-import { genSalt, hashSync } from "bcryptjs";
+import { compare, genSalt, hash, hashSync } from "bcryptjs";
 import { IUser } from "../interfaces/types";
 
 export interface UserDocument extends IUser, Document {
   createdAt: Date;
   updatedAt: Date;
+  comparePassword(userPassword: string): Promise<Boolean>;
 }
 
 const userSchema = new Schema(
@@ -26,7 +27,7 @@ userSchema.pre("save", async function (next) {
   }
 
   const salt = await genSalt(10);
-  const hash = hashSync("password", salt);
+  const hash = await hashSync(user.password, salt);
 
   user.password = hash;
 
@@ -39,7 +40,7 @@ userSchema.pre("updateOne", async function (next) {
   if (user._update.password) {
     const salt = await genSalt(10);
 
-    const hash = hashSync(user._update.password, salt);
+    const hash = await hashSync(user._update.password, salt);
 
     user._update.password = hash;
   }

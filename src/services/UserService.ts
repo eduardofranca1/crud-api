@@ -1,11 +1,53 @@
 import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
+import { compare } from "bcryptjs";
+import { sign } from "jsonwebtoken";
 import { omit } from "lodash";
+
+import { tokenSecret } from "../config";
 import CustomException from "../exceptions/CustomException";
 import { HttpStatus } from "../exceptions/HttpStatus";
-import { IUser } from "../interfaces/types";
+import { IUser, IAuthenticationRequest } from "../interfaces/types";
 import User, { UserDocument } from "../models/UserModel";
 
 class UserService {
+  login = async ({ email, password }: IAuthenticationRequest) => {
+    try {
+      const user = await User.findOne({ email }).select("password");
+
+      if (!user)
+        throw new CustomException(
+          "Email or password incorrect.",
+          HttpStatus.BAD_REQUEST
+        );
+
+      const passwordMatch = await compare(password, user.password);
+
+      if (!passwordMatch)
+        throw new CustomException(
+          "Email or password incorrect.",
+          HttpStatus.BAD_REQUEST
+        );
+
+      const token = sign(
+        {
+          email: user.email,
+        },
+        tokenSecret,
+        {
+          subject: user.id,
+          expiresIn: "1d",
+        }
+      );
+      return token;
+    } catch (error: any) {
+      if (error.code) throw new CustomException(error.message, error.code);
+      else {
+        console.log("aqui error");
+        throw new CustomException("Error", 500);
+      }
+    }
+  };
+
   createUser = async (input: IUser) => {
     try {
       const email = await User.findOne({ email: input.email });
@@ -21,7 +63,7 @@ class UserService {
       return omit(user.toJSON(), "password");
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
-      throw new CustomException("Error", 500);
+      else throw new CustomException("Error", 500);
     }
   };
 
@@ -30,7 +72,8 @@ class UserService {
       const users = await User.find();
       return users;
     } catch (error: any) {
-      throw new Error(error);
+      if (error.code) throw new CustomException(error.message, error.code);
+      else throw new CustomException("Error", 500);
     }
   };
 
@@ -43,7 +86,7 @@ class UserService {
       return user;
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
-      throw new CustomException("Error", 500);
+      else throw new CustomException("Error", 500);
     }
   };
 
@@ -72,7 +115,7 @@ class UserService {
       return updatedUser;
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
-      throw new CustomException("Error", 500);
+      else throw new CustomException("Error", 500);
     }
   };
 
@@ -85,7 +128,7 @@ class UserService {
       return User.deleteOne(query);
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
-      throw new CustomException("Error", 500);
+      else throw new CustomException("Error", 500);
     }
   };
 }

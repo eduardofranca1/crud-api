@@ -7,8 +7,8 @@ export const userSchema = yup.object().shape({
     password: yup
       .string()
       .required()
-      .min(6)
-      .label("Password must be at least 6 characters long"),
+      .min(8)
+      .label("Password must be at least 8 characters long"),
   }),
 });
 

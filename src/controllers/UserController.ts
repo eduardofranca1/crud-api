@@ -3,6 +3,19 @@ import { UserSchema, UserSchemaQuery } from "../schemas/UserSchema";
 import UserService from "../services/UserService";
 
 class UserController {
+  async login(request: Request, response: Response) {
+    try {
+      const { email, password } = request.body;
+
+      const userLogin = await UserService.login({ email, password });
+
+      return response.json(userLogin);
+    } catch (error: any) {
+      if (error.code) return response.status(error.code).json(error.message);
+      else return response.status(500).json("Error");
+    }
+  }
+
   async create(
     request: Request<{}, {}, UserSchema["body"]>,
     response: Response
@@ -23,7 +36,8 @@ class UserController {
     try {
       const result = await UserService.listAllUsers();
       return response.json(result);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.code) return response.status(error.code).json(error.message);
       return response.status(500).json(error);
     }
   }
