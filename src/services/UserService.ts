@@ -42,7 +42,6 @@ class UserService {
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
       else {
-        console.log("aqui error");
         throw new CustomException("Error", 500);
       }
     }
