@@ -43,7 +43,7 @@ class UserController {
   }
 
   async findById(
-    request: Request<UserSchemaQuery["query"]>,
+    request: Request<{}, {}, {}, UserSchemaQuery["query"]>,
     response: Response
   ) {
     try {
@@ -77,7 +77,7 @@ class UserController {
   }
 
   async deleteUser(
-    request: Request<UserSchemaQuery["query"]>,
+    request: Request<{}, {}, {}, UserSchemaQuery["query"]>,
     response: Response
   ) {
     try {
