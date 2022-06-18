@@ -12,7 +12,7 @@ import User, { UserDocument } from "../models/UserModel";
 class UserService {
   login = async ({ email, password }: IAuthenticationRequest) => {
     try {
-      const user = await User.findOne({ email }).select("password");
+      const user = await User.findOne({ email: email }).select("password");
 
       if (!user)
         throw new CustomException(
@@ -41,9 +41,7 @@ class UserService {
       return token;
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
-      else {
-        throw new CustomException("Error", 500);
-      }
+      else throw new CustomException("Error", 500);
     }
   };
 
@@ -61,6 +59,7 @@ class UserService {
 
       return omit(user.toJSON(), "password");
     } catch (error: any) {
+      console.log(error);
       if (error.code) throw new CustomException(error.message, error.code);
       else throw new CustomException("Error", 500);
     }
@@ -69,6 +68,8 @@ class UserService {
   listAllUsers = async () => {
     try {
       const users = await User.find();
+      if (!users)
+        throw new CustomException("There are no users", HttpStatus.NOT_FOUND);
       return users;
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
@@ -78,10 +79,8 @@ class UserService {
 
   getUserById = async (query: FilterQuery<UserDocument>) => {
     try {
-      const user = await User.findOne(query).lean();
-
+      const user = await User.findOne(query);
       if (!user) throw new CustomException("Not found", HttpStatus.NOT_FOUND);
-
       return user;
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
@@ -91,13 +90,10 @@ class UserService {
 
   updateUserById = async (
     query: FilterQuery<UserDocument>,
-    update: UpdateQuery<UserDocument>,
-    options: QueryOptions
+    update: UpdateQuery<UserDocument>
   ) => {
     try {
-      const user = await User.findOne(query).lean();
-
-      if (!user) throw new CustomException("Not found", HttpStatus.NOT_FOUND);
+      const user = await this.getUserById(query);
 
       if (user.email !== update.email) {
         const emailExists = await User.findOne({ email: update.email });
@@ -109,9 +105,7 @@ class UserService {
         }
       }
 
-      const updatedUser = await User.updateOne(query, update, options);
-
-      return updatedUser;
+      await User.updateOne(query, update);
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
       else throw new CustomException("Error", 500);
@@ -120,11 +114,8 @@ class UserService {
 
   deleteUserById = async (query: FilterQuery<UserDocument>) => {
     try {
-      const user = await User.findOne(query).lean();
-
-      if (!user) throw new CustomException("Not found", HttpStatus.NOT_FOUND);
-
-      return User.deleteOne(query);
+      const user = await this.getUserById(query);
+      await User.deleteOne({ _id: user._id });
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
       else throw new CustomException("Error", 500);
