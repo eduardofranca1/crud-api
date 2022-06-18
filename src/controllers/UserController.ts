@@ -1,13 +1,19 @@
 import { Request, Response } from "express";
-import { UserSchema, UserSchemaQuery } from "../schemas/UserSchema";
+import { AuthSchema, UserSchema, UserSchemaQuery } from "../schemas";
 import UserService from "../services/UserService";
 
 class UserController {
-  async login(request: Request, response: Response) {
+  async login(
+    request: Request<{}, {}, AuthSchema["body"]>,
+    response: Response
+  ) {
     try {
       const { email, password } = request.body;
 
-      const userLogin = await UserService.login({ email, password });
+      const userLogin = await UserService.login({
+        email: email as string,
+        password: password as string,
+      });
 
       return response.json(userLogin);
     } catch (error: any) {
@@ -66,10 +72,8 @@ class UserController {
       const { _id } = request.query;
       const update = request.body;
 
-      const result = await UserService.updateUserById({ _id }, update, {
-        new: true,
-      });
-      return response.json(result);
+      await UserService.updateUserById({ _id }, update);
+      return response.json("Your account has been updated!");
     } catch (error: any) {
       if (error.code) return response.status(error.code).json(error.message);
       return response.status(500).json(error);
@@ -83,7 +87,7 @@ class UserController {
     try {
       const { _id } = request.query;
       await UserService.deleteUserById({ _id });
-      return response.status(204).json("Deleted");
+      return response.sendStatus(204);
     } catch (error: any) {
       if (error.code) return response.status(error.code).json(error.message);
       return response.status(500).json(error);
