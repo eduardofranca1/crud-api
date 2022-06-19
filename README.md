@@ -12,6 +12,8 @@
 ### Features
 
 - CRUD User
+- Filter Query with Mongoose
+- Soft Delete
 - Authentication with [Json Web Token (JWT)](https://www.npmjs.com/package/jsonwebtoken)
 - Data Validation with [Yup](https://www.npmjs.com/package/yup)
 - Encrypt password with [BcryptJS](https://www.npmjs.com/package/bcryptjs)
@@ -24,4 +26,3 @@
 
 - **npm install** (to install node modules)
 - **npm run dev** (to start the server)
-

@@ -23,6 +23,12 @@ router.put(
   UserController.updateUser
 );
 
+router.put(
+  "/user/softDelete",
+  ensureUserAuthenticated,
+  UserController.softDelete
+);
+
 router.delete(
   "/user",
   ensureUserAuthenticated,

@@ -55,7 +55,7 @@ class UserController {
     try {
       const { _id } = request.query;
 
-      const result = await UserService.getUserById({ _id: _id });
+      const result = await UserService.getUserByFilter({ _id: _id });
 
       return response.json(result);
     } catch (error: any) {
@@ -72,8 +72,22 @@ class UserController {
       const { _id } = request.query;
       const update = request.body;
 
-      await UserService.updateUserById({ _id }, update);
+      await UserService.updateUserById(_id as string, update);
       return response.json("Your account has been updated!");
+    } catch (error: any) {
+      if (error.code) return response.status(error.code).json(error.message);
+      return response.status(500).json(error);
+    }
+  }
+
+  async softDelete(
+    request: Request<{}, {}, {}, UserSchemaQuery["query"]>,
+    response: Response
+  ) {
+    try {
+      const { _id } = request.query;
+      await UserService.softDeleteUser(_id as string);
+      return response.sendStatus(204);
     } catch (error: any) {
       if (error.code) return response.status(error.code).json(error.message);
       return response.status(500).json(error);
@@ -86,7 +100,7 @@ class UserController {
   ) {
     try {
       const { _id } = request.query;
-      await UserService.deleteUserById({ _id });
+      await UserService.deleteUserById(_id as string);
       return response.sendStatus(204);
     } catch (error: any) {
       if (error.code) return response.status(error.code).json(error.message);

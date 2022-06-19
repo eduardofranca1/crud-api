@@ -59,7 +59,6 @@ class UserService {
 
       return omit(user.toJSON(), "password");
     } catch (error: any) {
-      console.log(error);
       if (error.code) throw new CustomException(error.message, error.code);
       else throw new CustomException("Error", 500);
     }
@@ -77,7 +76,7 @@ class UserService {
     }
   };
 
-  getUserById = async (query: FilterQuery<UserDocument>) => {
+  getUserByFilter = async (query: FilterQuery<UserDocument>) => {
     try {
       const user = await User.findOne(query);
       if (!user) throw new CustomException("Not found", HttpStatus.NOT_FOUND);
@@ -89,11 +88,11 @@ class UserService {
   };
 
   updateUserById = async (
-    query: FilterQuery<UserDocument>,
+    idUser: string,
     update: UpdateQuery<UserDocument>
   ) => {
     try {
-      const user = await this.getUserById(query);
+      const user = await this.getUserByFilter({ _id: idUser });
 
       if (user.email !== update.email) {
         const emailExists = await User.findOne({ email: update.email });
@@ -105,16 +104,31 @@ class UserService {
         }
       }
 
-      await User.updateOne(query, update);
+      await User.updateOne({ _id: user._id }, update);
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
       else throw new CustomException("Error", 500);
     }
   };
 
-  deleteUserById = async (query: FilterQuery<UserDocument>) => {
+  softDeleteUser = async (idUser: string) => {
     try {
-      const user = await this.getUserById(query);
+      const result = await this.getUserByFilter({ _id: idUser });
+      const { _doc } = result;
+      const update = {
+        ..._doc,
+        disabled: true,
+      };
+      await User.updateOne({ _id: result._id }, update);
+    } catch (error: any) {
+      if (error.code) throw new CustomException(error.message, error.code);
+      else throw new CustomException("Error", 500);
+    }
+  };
+
+  deleteUserById = async (idUser: string) => {
+    try {
+      const user = await this.getUserByFilter({ _id: idUser });
       await User.deleteOne({ _id: user._id });
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
