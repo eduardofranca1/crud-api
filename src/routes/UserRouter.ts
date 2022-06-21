@@ -1,11 +1,11 @@
 import { Router } from "express";
 import UserController from "../controllers/UserController";
 import { ensureUserAuthenticated, validateSchema } from "../middlewares";
-import { userSchema, userSchemaQuery, authSchema } from "../schemas";
+import { userSchema, userSchemaQuery, loginSchema } from "../schemas";
 
 const router = Router();
 
-router.post("/login", validateSchema(authSchema), UserController.login);
+router.post("/login", validateSchema(loginSchema), UserController.login);
 router.post("/user", validateSchema(userSchema), UserController.create);
 
 router.get("/user", ensureUserAuthenticated, UserController.listAll);

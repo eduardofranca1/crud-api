@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { AuthSchema, UserSchema, UserSchemaQuery } from "../schemas";
+import { LoginSchema, UserSchema, UserSchemaQuery } from "../schemas";
 import UserService from "../services/UserService";
 
 class UserController {
   async login(
-    request: Request<{}, {}, AuthSchema["body"]>,
+    request: Request<{}, {}, LoginSchema["body"]>,
     response: Response
   ) {
     try {
@@ -55,10 +55,14 @@ class UserController {
     try {
       const { _id } = request.query;
 
-      const result = await UserService.getUserByFilter({ _id: _id });
+      const result = await UserService.getUserByFilter({
+        _id: _id,
+        disabled: false,
+      });
 
       return response.json(result);
     } catch (error: any) {
+      console.log(error);
       if (error.code) return response.status(error.code).json(error.message);
       else return response.status(500).json("Error");
     }

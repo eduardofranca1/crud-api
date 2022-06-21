@@ -1,4 +1,4 @@
-export { AuthSchema, authSchema } from "./AuthSchema";
+export { LoginSchema, loginSchema } from "./LoginSchema";
 export {
   UserSchema,
   userSchema,

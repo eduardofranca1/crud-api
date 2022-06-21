@@ -92,7 +92,7 @@ class UserService {
     update: UpdateQuery<UserDocument>
   ) => {
     try {
-      const user = await this.getUserByFilter({ _id: idUser });
+      const user = await this.getUserByFilter({ _id: idUser, disabled: false });
 
       if (user.email !== update.email) {
         const emailExists = await User.findOne({ email: update.email });
@@ -113,13 +113,13 @@ class UserService {
 
   softDeleteUser = async (idUser: string) => {
     try {
-      const result = await this.getUserByFilter({ _id: idUser });
-      const { _doc } = result;
+      const user = await this.getUserByFilter({ _id: idUser, disabled: false });
+      const { _doc } = user;
       const update = {
         ..._doc,
         disabled: true,
       };
-      await User.updateOne({ _id: result._id }, update);
+      await User.updateOne({ _id: user._id }, update);
     } catch (error: any) {
       if (error.code) throw new CustomException(error.message, error.code);
       else throw new CustomException("Error", 500);
