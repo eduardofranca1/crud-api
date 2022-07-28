@@ -17,8 +17,7 @@ class UserController {
 
       return response.json(userLogin);
     } catch (error: any) {
-      if (error.code) return response.status(error.code).json(error.message);
-      else return response.status(500).json("Error");
+      return response.status(error.code).json(error.message);
     }
   }
 
@@ -33,8 +32,7 @@ class UserController {
       const newUser = await UserService.createUser(bodyValidator);
       return response.status(201).json(newUser);
     } catch (error: any) {
-      if (error.code) return response.status(error.code).json(error.message);
-      return response.status(500).json("Error");
+      return response.status(error.code).json(error.message);
     }
   }
 
@@ -43,8 +41,7 @@ class UserController {
       const result = await UserService.listAllUsers();
       return response.json(result);
     } catch (error: any) {
-      if (error.code) return response.status(error.code).json(error.message);
-      return response.status(500).json(error);
+      return response.status(error.code).json(error.message);
     }
   }
 
@@ -63,8 +60,7 @@ class UserController {
       return response.json(result);
     } catch (error: any) {
       console.log(error);
-      if (error.code) return response.status(error.code).json(error.message);
-      else return response.status(500).json("Error");
+      return response.status(error.code).json(error.message);
     }
   }
 
@@ -79,8 +75,7 @@ class UserController {
       await UserService.updateUserById(_id as string, update);
       return response.json("Your account has been updated!");
     } catch (error: any) {
-      if (error.code) return response.status(error.code).json(error.message);
-      return response.status(500).json(error);
+      return response.status(error.code).json(error.message);
     }
   }
 
@@ -93,8 +88,7 @@ class UserController {
       await UserService.softDeleteUser(_id as string);
       return response.sendStatus(204);
     } catch (error: any) {
-      if (error.code) return response.status(error.code).json(error.message);
-      return response.status(500).json(error);
+      return response.status(error.code).json(error.message);
     }
   }
 
@@ -107,8 +101,7 @@ class UserController {
       await UserService.deleteUserById(_id as string);
       return response.sendStatus(204);
     } catch (error: any) {
-      if (error.code) return response.status(error.code).json(error.message);
-      return response.status(500).json(error);
+      return response.status(error.code).json(error.message);
     }
   }
 }

@@ -1,12 +1,13 @@
 import { HttpStatus } from "./HttpStatus";
 
-class CustomException extends Error {
+class Exception extends Error {
   code: HttpStatus;
 
   constructor(message: string, code: HttpStatus) {
     super(message);
-    this.code = code;
+    this.code = code ?? 500;
+    this.message = message ?? "Error";
   }
 }
 
-export default CustomException;
+export default Exception;

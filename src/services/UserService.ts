@@ -1,10 +1,10 @@
-import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
+import { FilterQuery, UpdateQuery } from "mongoose";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { omit } from "lodash";
 
 import { tokenSecret } from "../config";
-import CustomException from "../exceptions/CustomException";
+import Exception from "../exceptions/Exception";
 import { HttpStatus } from "../exceptions/HttpStatus";
 import { IUser, IAuthenticationRequest } from "../interfaces/types";
 import User, { UserDocument } from "../models/UserModel";
@@ -15,7 +15,7 @@ class UserService {
       const user = await User.findOne({ email: email }).select("password");
 
       if (!user)
-        throw new CustomException(
+        throw new Exception(
           "Email or password incorrect.",
           HttpStatus.BAD_REQUEST
         );
@@ -23,7 +23,7 @@ class UserService {
       const passwordMatch = await compare(password, user.password);
 
       if (!passwordMatch)
-        throw new CustomException(
+        throw new Exception(
           "Email or password incorrect.",
           HttpStatus.BAD_REQUEST
         );
@@ -40,8 +40,7 @@ class UserService {
       );
       return token;
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 
@@ -50,17 +49,13 @@ class UserService {
       const email = await User.findOne({ email: input.email });
 
       if (email)
-        throw new CustomException(
-          "Email already exists",
-          HttpStatus.BAD_REQUEST
-        );
+        throw new Exception("Email already exists", HttpStatus.BAD_REQUEST);
 
       const user = await User.create(input);
 
       return omit(user.toJSON(), "password");
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 
@@ -68,22 +63,20 @@ class UserService {
     try {
       const users = await User.find();
       if (!users)
-        throw new CustomException("There are no users", HttpStatus.NOT_FOUND);
+        throw new Exception("There are no users", HttpStatus.NOT_FOUND);
       return users;
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 
   getUserByFilter = async (query: FilterQuery<UserDocument>) => {
     try {
       const user = await User.findOne(query);
-      if (!user) throw new CustomException("Not found", HttpStatus.NOT_FOUND);
+      if (!user) throw new Exception("User not found", HttpStatus.NOT_FOUND);
       return user;
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 
@@ -97,17 +90,13 @@ class UserService {
       if (user.email !== update.email) {
         const emailExists = await User.findOne({ email: update.email });
         if (emailExists) {
-          throw new CustomException(
-            "Email already exists",
-            HttpStatus.BAD_REQUEST
-          );
+          throw new Exception("Email already exists", HttpStatus.BAD_REQUEST);
         }
       }
 
       await User.updateOne({ _id: user._id }, update);
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 
@@ -121,8 +110,7 @@ class UserService {
       };
       await User.updateOne({ _id: user._id }, update);
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 
@@ -131,8 +119,7 @@ class UserService {
       const user = await this.getUserByFilter({ _id: idUser });
       await User.deleteOne({ _id: user._id });
     } catch (error: any) {
-      if (error.code) throw new CustomException(error.message, error.code);
-      else throw new CustomException("Error", 500);
+      throw new Exception(error.message, error.code);
     }
   };
 }
