@@ -1,49 +1,10 @@
-import { FilterQuery, UpdateQuery } from "mongoose";
-import { compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
-import { omit } from "lodash";
-
-import { tokenSecret } from "../config";
-import Exception from "../exceptions/Exception";
+import { UpdateQuery } from "mongoose";
 import { HttpStatus } from "../exceptions/HttpStatus";
-import { IUser, IAuthenticationRequest } from "../interfaces/types";
-import User, { UserDocument } from "../models/UserModel";
+import User from "../models/UserModel";
+import { IUser } from "../interfaces/types";
+import Exception from "../exceptions/Exception";
 
 class UserService {
-  login = async ({ email, password }: IAuthenticationRequest) => {
-    try {
-      const user = await User.findOne({ email: email }).select("password");
-
-      if (!user)
-        throw new Exception(
-          "Email or password incorrect.",
-          HttpStatus.BAD_REQUEST
-        );
-
-      const passwordMatch = await compare(password, user.password);
-
-      if (!passwordMatch)
-        throw new Exception(
-          "Email or password incorrect.",
-          HttpStatus.BAD_REQUEST
-        );
-
-      const token = sign(
-        {
-          email: user.email,
-        },
-        tokenSecret,
-        {
-          subject: user.id,
-          expiresIn: "1d",
-        }
-      );
-      return token;
-    } catch (error: any) {
-      throw new Exception(error.message, error.code);
-    }
-  };
-
   createUser = async (input: IUser) => {
     try {
       const email = await User.findOne({ email: input.email });
@@ -53,7 +14,7 @@ class UserService {
 
       const user = await User.create(input);
 
-      return omit(user.toJSON(), "password");
+      return user;
     } catch (error: any) {
       throw new Exception(error.message, error.code);
     }
@@ -70,9 +31,9 @@ class UserService {
     }
   };
 
-  getUserByFilter = async (query: FilterQuery<UserDocument>) => {
+  findUserById = async (idUser: string) => {
     try {
-      const user = await User.findOne(query);
+      const user = await User.findOne({ _id: idUser, disabled: false });
       if (!user) throw new Exception("User not found", HttpStatus.NOT_FOUND);
       return user;
     } catch (error: any) {
@@ -80,12 +41,20 @@ class UserService {
     }
   };
 
-  updateUserById = async (
-    idUser: string,
-    update: UpdateQuery<UserDocument>
-  ) => {
+  findUserByEmail = async (email: string) => {
     try {
-      const user = await this.getUserByFilter({ _id: idUser, disabled: false });
+      const user = await User.findOne({ email: email, disabled: false });
+      if (!user) throw new Exception("User not found", HttpStatus.NOT_FOUND);
+      return user;
+    } catch (error: any) {
+      throw new Exception(error.message, error.code);
+    }
+  };
+
+  //updateUserById = async (idUser: string, update: IUser)
+  updateUserById = async (idUser: string, update: UpdateQuery<IUser>) => {
+    try {
+      const user = await this.findUserById(idUser);
 
       if (user.email !== update.email) {
         const emailExists = await User.findOne({ email: update.email });
@@ -100,15 +69,10 @@ class UserService {
     }
   };
 
-  softDeleteUser = async (idUser: string) => {
+  softDelete = async (idUser: string) => {
     try {
-      const user = await this.getUserByFilter({ _id: idUser, disabled: false });
-      const { _doc } = user;
-      const update = {
-        ..._doc,
-        disabled: true,
-      };
-      await User.updateOne({ _id: user._id }, update);
+      const user = await this.findUserById(idUser);
+      await User.updateOne({ _id: user._id }, { disabled: true });
     } catch (error: any) {
       throw new Exception(error.message, error.code);
     }
@@ -116,7 +80,7 @@ class UserService {
 
   deleteUserById = async (idUser: string) => {
     try {
-      const user = await this.getUserByFilter({ _id: idUser });
+      const user = await this.findUserById(idUser);
       await User.deleteOne({ _id: user._id });
     } catch (error: any) {
       throw new Exception(error.message, error.code);

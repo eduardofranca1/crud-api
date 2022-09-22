@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { LoginSchema, UserSchema, UserSchemaQuery } from "../schemas";
+import AuthenticationService from "../services/AuthenticationService";
 import UserService from "../services/UserService";
 
 class UserController {
@@ -10,7 +11,7 @@ class UserController {
     try {
       const { email, password } = request.body;
 
-      const userLogin = await UserService.login({
+      const userLogin = await AuthenticationService.login({
         email: email as string,
         password: password as string,
       });
@@ -30,7 +31,7 @@ class UserController {
       const bodyValidator: any = body;
 
       const newUser = await UserService.createUser(bodyValidator);
-      return response.status(201).json(newUser);
+      return response.status(201).json(newUser._id);
     } catch (error: any) {
       return response.status(error.code).json(error.message);
     }
@@ -52,14 +53,10 @@ class UserController {
     try {
       const { _id } = request.query;
 
-      const result = await UserService.getUserByFilter({
-        _id: _id,
-        disabled: false,
-      });
+      const result = await UserService.findUserById(_id as string);
 
       return response.json(result);
     } catch (error: any) {
-      console.log(error);
       return response.status(error.code).json(error.message);
     }
   }
@@ -85,7 +82,7 @@ class UserController {
   ) {
     try {
       const { _id } = request.query;
-      await UserService.softDeleteUser(_id as string);
+      await UserService.softDelete(_id as string);
       return response.sendStatus(204);
     } catch (error: any) {
       return response.status(error.code).json(error.message);

@@ -8,11 +8,12 @@
 - [NodeJS](https://nodejs.org/en/)
 - [MongoDB](https://www.mongodb.com/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
 
 ### Features
 
+- Unit Test with Jest
 - CRUD User
-- Filter Query with Mongoose
 - Soft Delete
 - Authentication with [Json Web Token (JWT)](https://www.npmjs.com/package/jsonwebtoken)
 - Data Validation with [Yup](https://www.npmjs.com/package/yup)
