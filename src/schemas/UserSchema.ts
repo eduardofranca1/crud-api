@@ -13,9 +13,12 @@ export const userSchema = yup.object().shape({
 });
 
 export const userSchemaQuery = yup.object().shape({
-  query: yup.object().shape({
-    _id: yup.string().required().label("User id is required"),
-  }),
+  query: yup
+    .object()
+    .shape({
+      _id: yup.string().required().label("User id is required"),
+    })
+    .required(),
 });
 
 export type UserSchema = yup.TypeOf<typeof userSchema>;

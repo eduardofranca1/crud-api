@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "../models/UserModel";
+import User from "../../models/UserModel";
 import UserService from "./UserService";
 
 describe("Testing user service", () => {

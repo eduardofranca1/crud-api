@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { LoginSchema, UserSchema, UserSchemaQuery } from "../schemas";
-import AuthenticationService from "../services/AuthenticationService";
-import UserService from "../services/UserService";
+import { AuthenticationService, UserService } from "../services";
 
 class UserController {
   async login(
@@ -53,7 +52,7 @@ class UserController {
     try {
       const { _id } = request.query;
 
-      const result = await UserService.findUserById(_id as string);
+      const result = await UserService.findUserById(_id);
 
       return response.json(result);
     } catch (error: any) {
@@ -82,7 +81,7 @@ class UserController {
   ) {
     try {
       const { _id } = request.query;
-      await UserService.softDelete(_id as string);
+      await UserService.softDelete(_id);
       return response.sendStatus(204);
     } catch (error: any) {
       return response.status(error.code).json(error.message);
@@ -95,7 +94,7 @@ class UserController {
   ) {
     try {
       const { _id } = request.query;
-      await UserService.deleteUserById(_id as string);
+      await UserService.deleteUserById(_id);
       return response.sendStatus(204);
     } catch (error: any) {
       return response.status(error.code).json(error.message);

@@ -1,8 +1,8 @@
 import { UpdateQuery } from "mongoose";
-import { HttpStatus } from "../exceptions/HttpStatus";
-import User from "../models/UserModel";
-import { IUser } from "../interfaces/types";
-import Exception from "../exceptions/Exception";
+import { HttpStatus } from "../../exceptions/HttpStatus";
+import User from "../../models/UserModel";
+import { IUser } from "../../interfaces/types";
+import Exception from "../../exceptions/Exception";
 
 class UserService {
   createUser = async (input: IUser) => {
@@ -51,7 +51,6 @@ class UserService {
     }
   };
 
-  //updateUserById = async (idUser: string, update: IUser)
   updateUserById = async (idUser: string, update: UpdateQuery<IUser>) => {
     try {
       const user = await this.findUserById(idUser);
