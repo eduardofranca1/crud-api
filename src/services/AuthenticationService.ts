@@ -1,6 +1,6 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { tokenSecret } from "../config";
+import { tokenSecret } from "../config/Config";
 import Exception from "../exceptions/Exception";
 import { HttpStatus } from "../exceptions/HttpStatus";
 import { IAuthenticationRequest } from "../interfaces/types";

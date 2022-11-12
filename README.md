@@ -12,7 +12,8 @@
 
 ### Features
 
-- Unit Test with Jest
+- Unit Test with [Jest](https://jestjs.io/pt-BR/);
+- API Documentation with [Swagger](https://swagger.io/)
 - CRUD User
 - Soft Delete
 - Authentication with [Json Web Token (JWT)](https://www.npmjs.com/package/jsonwebtoken)
@@ -21,9 +22,9 @@
 
 - Next steps:
   - Authorization
-  - API Documentation with [Swagger](https://swagger.io/)
 
 ### How to execute:
 
 - **npm install** (to install node modules)
 - **npm run dev** (to start the server)
+- **npm run test** (to execute the tests)

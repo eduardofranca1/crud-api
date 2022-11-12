@@ -9,13 +9,11 @@ class UserController {
   ) {
     try {
       const { email, password } = request.body;
-
       const userLogin = await AuthenticationService.login({
-        email: email as string,
-        password: password as string,
+        email: email,
+        password: password,
       });
-
-      return response.json(userLogin);
+      return response.status(200).json(userLogin);
     } catch (error: any) {
       return response.status(error.code).json(error.message);
     }
@@ -28,7 +26,6 @@ class UserController {
     try {
       const { body } = request;
       const bodyValidator: any = body;
-
       const newUser = await UserService.createUser(bodyValidator);
       return response.status(201).json(newUser._id);
     } catch (error: any) {
@@ -36,10 +33,10 @@ class UserController {
     }
   }
 
-  async listAll(request: Request, response: Response) {
+  async listAll(_request: Request, response: Response) {
     try {
       const result = await UserService.listAllUsers();
-      return response.json(result);
+      return response.status(200).json(result);
     } catch (error: any) {
       return response.status(error.code).json(error.message);
     }
@@ -51,10 +48,8 @@ class UserController {
   ) {
     try {
       const { _id } = request.query;
-
       const result = await UserService.findUserById(_id);
-
-      return response.json(result);
+      return response.status(200).json(result);
     } catch (error: any) {
       return response.status(error.code).json(error.message);
     }
@@ -65,11 +60,14 @@ class UserController {
     response: Response
   ) {
     try {
-      const { _id } = request.query;
-      const update = request.body;
-
-      await UserService.updateUserById(_id as string, update);
-      return response.json("Your account has been updated!");
+      const { _id, name, email, password } = request.body;
+      const objectFromBody = {
+        name: name,
+        email: email,
+        password: password,
+      };
+      await UserService.updateUserById(_id, objectFromBody);
+      return response.status(200).json("Your account has been updated!");
     } catch (error: any) {
       return response.status(error.code).json(error.message);
     }

@@ -1,4 +1,3 @@
-import { UpdateQuery } from "mongoose";
 import { HttpStatus } from "../../exceptions/HttpStatus";
 import User from "../../models/UserModel";
 import { IUser } from "../../interfaces/types";
@@ -22,10 +21,7 @@ class UserService {
 
   listAllUsers = async () => {
     try {
-      const users = await User.find();
-      if (!users)
-        throw new Exception("There are no users", HttpStatus.NOT_FOUND);
-      return users;
+      return await User.find();
     } catch (error: any) {
       throw new Exception(error.message, error.code);
     }
@@ -51,7 +47,7 @@ class UserService {
     }
   };
 
-  updateUserById = async (idUser: string, update: UpdateQuery<IUser>) => {
+  updateUserById = async (idUser: string, update: IUser) => {
     try {
       const user = await this.findUserById(idUser);
 

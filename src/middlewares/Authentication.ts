@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
-import { tokenSecret } from "../config";
+import { tokenSecret } from "../config/Config";
 
 export default function ensureUserAuthenticated(
   request: Request,
