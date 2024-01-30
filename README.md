@@ -28,3 +28,4 @@
 - **npm install** (to install node modules)
 - **npm run dev** (to start the server)
 - **npm run test** (to execute the tests)
+- **npm run build** (to execute the build)

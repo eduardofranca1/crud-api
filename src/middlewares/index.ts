@@ -1,2 +1,2 @@
 export { default as ensureUserAuthenticated } from "./Authentication";
-export { validateSchema } from "./ValidateSchema";
+export { validateSchema } from "./validateSchema";

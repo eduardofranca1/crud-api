@@ -13,9 +13,9 @@ class UserController {
         email: email,
         password: password,
       });
-      return response.status(200).json(userLogin);
+      response.status(200).json(userLogin);
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 
@@ -27,18 +27,18 @@ class UserController {
       const { body } = request;
       const bodyValidator: any = body;
       const newUser = await UserService.createUser(bodyValidator);
-      return response.status(201).json(newUser._id);
+      response.status(201).json(newUser._id);
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 
   async listAll(_request: Request, response: Response) {
     try {
       const result = await UserService.listAllUsers();
-      return response.status(200).json(result);
+      response.status(200).json(result);
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 
@@ -49,9 +49,9 @@ class UserController {
     try {
       const { _id } = request.query;
       const result = await UserService.findUserById(_id);
-      return response.status(200).json(result);
+      response.status(200).json(result);
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 
@@ -67,9 +67,9 @@ class UserController {
         password: password,
       };
       await UserService.updateUserById(_id, objectFromBody);
-      return response.status(200).json("Your account has been updated!");
+      response.status(200).json("Your account has been updated!");
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 
@@ -80,9 +80,9 @@ class UserController {
     try {
       const { _id } = request.query;
       await UserService.softDelete(_id);
-      return response.sendStatus(204);
+      response.sendStatus(204);
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 
@@ -93,9 +93,9 @@ class UserController {
     try {
       const { _id } = request.query;
       await UserService.deleteUserById(_id);
-      return response.sendStatus(204);
+      response.sendStatus(204);
     } catch (error: any) {
-      return response.status(error.code).json(error.message);
+      response.status(error.code).json(error.message);
     }
   }
 }

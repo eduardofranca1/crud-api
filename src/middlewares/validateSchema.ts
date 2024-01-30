@@ -11,7 +11,7 @@ const validateSchema =
       });
       next();
     } catch (error: any) {
-      return response.status(400).json(error.params.label);
+      response.status(400).json(error.params.label);
     }
   };
 
