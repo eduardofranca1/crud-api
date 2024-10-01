@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { checkUserEmail } from "../Validations/StringSchema";
+import { checkUserEmail } from "../validations/string";
 
 export const createUserSchema = z
   .object({

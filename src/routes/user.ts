@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { authentication, validateSchema } from "../middlewares";
+import { authenticate, validateSchema } from "../middlewares";
 import {
   authSchema,
   createUserSchema,
   queryIdSchema,
   updateUserSchema,
 } from "../schemas";
-import UserController from "../controllers/UserController";
+import UserController from "../controllers/user.controller";
 
 const router = Router();
 
@@ -72,7 +72,7 @@ router.post("/user", validateSchema(createUserSchema), UserController.create);
  *       500:
  *         description: Internal Server Error
  */
-router.get("/user", authentication, UserController.listAll);
+router.get("/user", authenticate, UserController.findAll);
 
 /**
  * @openapi
@@ -102,7 +102,7 @@ router.get("/user", authentication, UserController.listAll);
  */
 router.get(
   "/user/findById",
-  authentication,
+  authenticate,
   validateSchema(queryIdSchema),
   UserController.findById
 );
@@ -133,9 +133,9 @@ router.get(
  */
 router.put(
   "/user",
-  // authentication,
+  authenticate,
   validateSchema(updateUserSchema),
-  UserController.updateUser
+  UserController.update
 );
 
 /**
@@ -161,7 +161,7 @@ router.put(
  *       500:
  *         description: Internal Server Error
  */
-router.put("/user/softDelete", authentication, UserController.softDelete);
+router.put("/user/softDelete", authenticate, UserController.softDelete);
 
 /**
  * @openapi
@@ -188,9 +188,9 @@ router.put("/user/softDelete", authentication, UserController.softDelete);
  */
 router.delete(
   "/user",
-  authentication,
+  authenticate,
   validateSchema(queryIdSchema),
-  UserController.deleteUser
+  UserController.delete
 );
 
 export default router;

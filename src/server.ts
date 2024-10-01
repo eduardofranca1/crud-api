@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 
-import UserRouter from "./routes/UserRouter";
+import UserRouter from "./routes/user";
 import { mongodb, openapiSpecification } from "./config";
 
 mongoose.connect(mongodb);

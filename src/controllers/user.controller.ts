@@ -12,10 +12,7 @@ class UserController {
   async login(request: Request<{}, {}, AuthSchema>, response: Response) {
     try {
       const { email, password } = request.body;
-      const result = await AuthenticationService.login({
-        email: email,
-        password: password,
-      });
+      const result = await AuthenticationService.login({ email, password });
       response.status(200).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);
@@ -36,7 +33,7 @@ class UserController {
     }
   }
 
-  async listAll(_request: Request, response: Response) {
+  async findAll(_request: Request, response: Response) {
     try {
       const result = await UserService.findAll();
       response.status(200).json(result);
@@ -58,7 +55,7 @@ class UserController {
     }
   }
 
-  async updateUser(
+  async update(
     request: Request<{}, {}, UpdateUserSchema, QueryIdSchema>,
     response: Response
   ) {
@@ -89,7 +86,7 @@ class UserController {
     }
   }
 
-  async deleteUser(
+  async delete(
     request: Request<{}, {}, {}, QueryIdSchema>,
     response: Response
   ) {

@@ -1,13 +1,18 @@
-import { HttpStatus } from "../../exceptions/HttpStatus";
-import User from "../../models/UserModel";
+import { HttpStatus } from "../../exceptions/httpStatus";
+import User from "../../models/user";
 import { CreateUser, UpdateUser } from "../../types";
-import Exception from "../../exceptions/Exception";
+import Exception from "../../exceptions/exception";
 
 class UserService {
   create = async (object: CreateUser) => {
     try {
       const user = await User.create(object);
-      return user._id;
+      const result = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      };
+      return result;
     } catch (error: any) {
       throw new Exception(error.message, error.code);
     }

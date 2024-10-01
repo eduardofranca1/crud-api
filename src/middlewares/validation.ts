@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AnyZodObject, ZodSchema } from "zod";
+import { ZodSchema } from "zod";
 
 type ErrorZod = {
   message: string;
@@ -45,7 +45,6 @@ export const validateSchema =
       }
       next();
     } catch (error: any) {
-      console.log("🚀 ~ error:", error);
       response.status(400).json(handleErrors(error.errors));
     }
   };

@@ -1,10 +1,10 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { tokenSecret } from "../config/Config";
-import Exception from "../exceptions/Exception";
-import { HttpStatus } from "../exceptions/HttpStatus";
-import { Auth } from "../types/Authentication";
-import User from "../models/UserModel";
+import { tokenSecret } from "../../config/config";
+import Exception from "../../exceptions/exception";
+import { HttpStatus } from "../../exceptions/httpStatus";
+import { Auth } from "../../types";
+import User from "../../models/user";
 
 class AuthenticationService {
   login = async ({ email, password }: Auth) => {
@@ -27,12 +27,12 @@ class AuthenticationService {
 
       const token = sign(
         {
-          idUser: user._id,
+          userId: user._id,
         },
         tokenSecret,
         {
           subject: user.id,
-          expiresIn: "1d",
+          expiresIn: "1h",
         }
       );
       return token;

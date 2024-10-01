@@ -1,5 +1,5 @@
 import { z } from "zod";
-import User from "../../models/UserModel";
+import User from "../../models/user";
 
 // verificar uma forma de pegar o nome da propriedade e colocar no lugar "Field"
 export const nonemptyString = z

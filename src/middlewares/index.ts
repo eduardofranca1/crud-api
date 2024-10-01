@@ -1,2 +1,2 @@
-export { authentication } from "./Authentication";
-export { validateSchema } from "./ValidateSchema";
+export { authenticate } from "./authentication";
+export { validateSchema } from "./validation";

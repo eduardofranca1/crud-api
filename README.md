@@ -1,6 +1,6 @@
-# Node Rest API
+# Node API Rest
 
-## Node.js api with Express, Mongoose and TypeScript
+## Crud API using Node.js, Express, Mongoose, TypeScript and Jest
 
 ### Technologies:
 
@@ -12,16 +12,17 @@
 
 ### Features
 
-- Unit Test with [Jest](https://jestjs.io/pt-BR/);
-- API Documentation with [Swagger](https://swagger.io/)
+- Unit Tests using [Jest](https://jestjs.io/pt-BR/);
+- API Documentation using [Swagger](https://swagger.io/)
+- Authentication using [Json Web Token (JWT)](https://www.npmjs.com/package/jsonwebtoken)
+- Data Validation using [Zod](https://zod.dev/)
+- Encrypt password using [BcryptJS](https://www.npmjs.com/package/bcryptjs)
 - CRUD User
 - Soft Delete
-- Authentication with [Json Web Token (JWT)](https://www.npmjs.com/package/jsonwebtoken)
-- Data Validation with [Yup](https://www.npmjs.com/package/yup)
-- Encrypt password with [BcryptJS](https://www.npmjs.com/package/bcryptjs)
 
 - Next steps:
   - Authorization
+  - Log
 
 ### How to execute:
 
