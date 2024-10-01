@@ -1,3 +1,7 @@
+tests:
+
+- unit test controller
+
 validação de schemas:
 
 schemas :

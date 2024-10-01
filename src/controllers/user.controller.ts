@@ -80,7 +80,7 @@ class UserController {
       const { _id } = request.query;
       const { disabled } = request.body;
       await UserService.softDelete(_id, disabled);
-      response.sendStatus(204);
+      response.sendStatus(200);
     } catch (error: any) {
       response.status(error.code).json(error.message);
     }
