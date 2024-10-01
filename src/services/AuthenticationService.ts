@@ -3,13 +3,13 @@ import { sign } from "jsonwebtoken";
 import { tokenSecret } from "../config/Config";
 import Exception from "../exceptions/Exception";
 import { HttpStatus } from "../exceptions/HttpStatus";
-import { IAuthenticationRequest } from "../interfaces/types";
+import { Auth } from "../types/Authentication";
 import User from "../models/UserModel";
 
 class AuthenticationService {
-  login = async ({ email, password }: IAuthenticationRequest) => {
+  login = async ({ email, password }: Auth) => {
     try {
-      const user = await User.findOne({ email: email }).select("password");
+      const user = await User.findOne({ email }).select("password");
 
       if (!user)
         throw new Exception(
@@ -27,7 +27,7 @@ class AuthenticationService {
 
       const token = sign(
         {
-          email: user.email,
+          idUser: user._id,
         },
         tokenSecret,
         {

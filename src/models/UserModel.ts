@@ -1,37 +1,33 @@
 import { Schema, model } from "mongoose";
 import { genSalt, hashSync } from "bcryptjs";
-import { IUser } from "../interfaces/types";
+import { User as UserSchema } from "../types/User";
 
-export interface UserDocument extends IUser, Document {
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const userSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      select: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+const userSchema = new Schema<UserSchema>({
+  name: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  createdAt: {
+    type: String,
+  },
+  updatedAt: {
+    type: String,
+  },
+});
 
 userSchema.pre("save", async function (next) {
   let user = this;

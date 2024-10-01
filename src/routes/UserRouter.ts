@@ -1,7 +1,12 @@
 import { Router } from "express";
+import { authentication, validateSchema } from "../middlewares";
+import {
+  authSchema,
+  createUserSchema,
+  queryIdSchema,
+  updateUserSchema,
+} from "../schemas";
 import UserController from "../controllers/UserController";
-import { ensureUserAuthenticated, validateSchema } from "../middlewares";
-import { userSchema, userSchemaQuery, loginSchema } from "../schemas";
 
 const router = Router();
 
@@ -27,7 +32,7 @@ const router = Router();
  *       500:
  *         description: Internal Server Error
  */
-router.post("/login", validateSchema(loginSchema), UserController.login);
+router.post("/login", validateSchema(authSchema), UserController.login);
 
 /**
  * @openapi
@@ -51,7 +56,7 @@ router.post("/login", validateSchema(loginSchema), UserController.login);
  *       500:
  *         description: Internal Server Error
  */
-router.post("/user", validateSchema(userSchema), UserController.create);
+router.post("/user", validateSchema(createUserSchema), UserController.create);
 
 /**
  * @openapi
@@ -67,7 +72,7 @@ router.post("/user", validateSchema(userSchema), UserController.create);
  *       500:
  *         description: Internal Server Error
  */
-router.get("/user", ensureUserAuthenticated, UserController.listAll);
+router.get("/user", authentication, UserController.listAll);
 
 /**
  * @openapi
@@ -97,8 +102,8 @@ router.get("/user", ensureUserAuthenticated, UserController.listAll);
  */
 router.get(
   "/user/findById",
-  ensureUserAuthenticated,
-  validateSchema(userSchemaQuery),
+  authentication,
+  validateSchema(queryIdSchema),
   UserController.findById
 );
 
@@ -128,8 +133,8 @@ router.get(
  */
 router.put(
   "/user",
-  ensureUserAuthenticated,
-  validateSchema(userSchema),
+  // authentication,
+  validateSchema(updateUserSchema),
   UserController.updateUser
 );
 
@@ -156,11 +161,7 @@ router.put(
  *       500:
  *         description: Internal Server Error
  */
-router.put(
-  "/user/softDelete",
-  ensureUserAuthenticated,
-  UserController.softDelete
-);
+router.put("/user/softDelete", authentication, UserController.softDelete);
 
 /**
  * @openapi
@@ -187,8 +188,8 @@ router.put(
  */
 router.delete(
   "/user",
-  ensureUserAuthenticated,
-  validateSchema(userSchemaQuery),
+  authentication,
+  validateSchema(queryIdSchema),
   UserController.deleteUser
 );
 

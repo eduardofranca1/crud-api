@@ -1,33 +1,36 @@
 import { Request, Response } from "express";
-import { LoginSchema, UserSchema, UserSchemaQuery } from "../schemas";
 import { AuthenticationService, UserService } from "../services";
+import {
+  AuthSchema,
+  CreateUserSchema,
+  UpdateUserSchema,
+  QueryIdSchema,
+  DisabledUserSchema,
+} from "../schemas";
 
 class UserController {
-  async login(
-    request: Request<{}, {}, LoginSchema["body"]>,
-    response: Response
-  ) {
+  async login(request: Request<{}, {}, AuthSchema>, response: Response) {
     try {
       const { email, password } = request.body;
-      const userLogin = await AuthenticationService.login({
+      const result = await AuthenticationService.login({
         email: email,
         password: password,
       });
-      response.status(200).json(userLogin);
+      response.status(200).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);
     }
   }
 
-  async create(
-    request: Request<{}, {}, UserSchema["body"]>,
-    response: Response
-  ) {
+  async create(request: Request<{}, {}, CreateUserSchema>, response: Response) {
     try {
-      const { body } = request;
-      const bodyValidator: any = body;
-      const newUser = await UserService.createUser(bodyValidator);
-      response.status(201).json(newUser._id);
+      const { name, email, password } = request.body;
+      const result = await UserService.create({
+        name,
+        email,
+        password,
+      });
+      response.status(201).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);
     }
@@ -35,7 +38,7 @@ class UserController {
 
   async listAll(_request: Request, response: Response) {
     try {
-      const result = await UserService.listAllUsers();
+      const result = await UserService.findAll();
       response.status(200).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);
@@ -43,12 +46,12 @@ class UserController {
   }
 
   async findById(
-    request: Request<{}, {}, {}, UserSchemaQuery["query"]>,
+    request: Request<{}, {}, {}, QueryIdSchema>,
     response: Response
   ) {
     try {
       const { _id } = request.query;
-      const result = await UserService.findUserById(_id);
+      const result = await UserService.findById(_id);
       response.status(200).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);
@@ -56,17 +59,16 @@ class UserController {
   }
 
   async updateUser(
-    request: Request<{}, {}, UserSchema["body"]>,
+    request: Request<{}, {}, UpdateUserSchema, QueryIdSchema>,
     response: Response
   ) {
     try {
-      const { _id, name, email, password } = request.body;
-      const objectFromBody = {
-        name: name,
-        email: email,
-        password: password,
-      };
-      await UserService.updateUserById(_id, objectFromBody);
+      const { _id } = request.query;
+      const { name, email } = request.body;
+      await UserService.updateById(_id, {
+        name,
+        email,
+      });
       response.status(200).json("Your account has been updated!");
     } catch (error: any) {
       response.status(error.code).json(error.message);
@@ -74,12 +76,13 @@ class UserController {
   }
 
   async softDelete(
-    request: Request<{}, {}, {}, UserSchemaQuery["query"]>,
+    request: Request<{}, {}, DisabledUserSchema, QueryIdSchema>,
     response: Response
   ) {
     try {
       const { _id } = request.query;
-      await UserService.softDelete(_id);
+      const { disabled } = request.body;
+      await UserService.softDelete(_id, disabled);
       response.sendStatus(204);
     } catch (error: any) {
       response.status(error.code).json(error.message);
@@ -87,12 +90,12 @@ class UserController {
   }
 
   async deleteUser(
-    request: Request<{}, {}, {}, UserSchemaQuery["query"]>,
+    request: Request<{}, {}, {}, QueryIdSchema>,
     response: Response
   ) {
     try {
       const { _id } = request.query;
-      await UserService.deleteUserById(_id);
+      await UserService.deleteById(_id);
       response.sendStatus(204);
     } catch (error: any) {
       response.status(error.code).json(error.message);
