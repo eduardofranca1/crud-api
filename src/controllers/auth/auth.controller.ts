@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { AuthService } from "../../services";
 import { AuthSchema } from "../../schemas";
 
 class AuthController {
-  async login(request: Request<{}, {}, AuthSchema>, response: Response) {
+  async login(
+    request: Request<{}, {}, AuthSchema>,
+    response: Response,
+    next: NextFunction
+  ) {
     try {
       const { email, password } = request.body;
       const result = await AuthService.login({ email, password });

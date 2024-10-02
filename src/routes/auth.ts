@@ -10,7 +10,7 @@ const router = Router();
  * /login:
  *   post:
  *     tags:
- *       - User
+ *       - Auth
  *     summary: User login
  *     requestBody:
  *      description: To user sign in the system

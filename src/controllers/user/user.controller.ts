@@ -50,6 +50,7 @@ class UserController {
   ) {
     try {
       const { _id } = request.query;
+      // if (!_id) return response.status(400).json("User id is required.");
       const { name, email } = request.body;
       await UserService.updateById(_id, {
         name,
@@ -61,15 +62,14 @@ class UserController {
     }
   }
 
-  async softDelete(
-    request: Request<{}, {}, DisabledUserSchema, QueryIdSchema>,
+  async disabled(
+    request: Request<{}, {}, DisabledUserSchema>,
     response: Response
   ) {
     try {
-      const { _id } = request.query;
-      const { disabled } = request.body;
-      await UserService.softDelete(_id, disabled);
-      response.status(200).json("User disabled");
+      const { _id } = request.body;
+      await UserService.disabled(_id);
+      response.status(200).json("User updated");
     } catch (error: any) {
       response.status(error.code).json(error.message);
     }

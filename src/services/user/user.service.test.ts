@@ -124,16 +124,13 @@ describe("UserServiceTest", () => {
       password: "123456",
     });
 
-    const disabledUser = await UserService.softDelete(
-      user._id.toString(),
-      true
-    );
+    const disabledUser = await UserService.disabled(user._id.toString());
     expect(disabledUser).not.toBeInstanceOf(Error);
   });
 
   it("should throw an exception when trying to disabled a non-existing user", async () => {
     await expect(
-      UserService.softDelete("66e03041e8902e1fc4c558ca", true)
+      UserService.disabled("66e03041e8902e1fc4c558ca")
     ).rejects.toThrow("User not found");
   });
 

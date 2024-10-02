@@ -11,7 +11,7 @@ app.post("/user", UserController.create);
 app.get("/user", UserController.findAll);
 app.get("/user/findById", UserController.findById);
 app.put("/user", UserController.update);
-app.put("/user/softDelete", UserController.softDelete);
+app.put("/user/disabled", UserController.disabled);
 app.delete("/user", UserController.delete);
 
 jest.mock("../../services/user/user.service.ts");
@@ -128,18 +128,18 @@ describe("UserControllerTest", () => {
 
   it("should disabled a user and return 200 status.", async () => {
     const response = await request(app).put(
-      "/user/softDelete?_id=66e03041e8902e1fc4c558cc"
+      "/user/disabled?_id=66e03041e8902e1fc4c558cc"
     );
     expect(response.status).toBe(200);
-    expect(response.body).toEqual("User disabled");
+    expect(response.body).toEqual("User updated");
   });
 
   it("should return a 404 status if the user to disabled is not found.", async () => {
-    UserService.softDelete = jest
+    UserService.disabled = jest
       .fn()
       .mockRejectedValue(new Exception("User not found", 404));
     const response = await request(app).put(
-      "/user/softDelete?_id=66e03041e8902e1fc4c558cc"
+      "/user/disabled?_id=66e03041e8902e1fc4c558cc"
     );
     expect(response.status).toBe(404);
     expect(response.body).toEqual("User not found");

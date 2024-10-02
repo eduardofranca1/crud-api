@@ -18,7 +18,7 @@ class UserService {
   };
 
   findById = async (_id: string) => {
-    const user = await User.findOne({ _id, disabled: false });
+    const user = await User.findOne({ _id });
     if (!user) throw new Exception("User not found", HttpStatus.NOT_FOUND);
     return user;
   };
@@ -40,9 +40,9 @@ class UserService {
     await User.updateOne({ _id: user._id }, update);
   };
 
-  softDelete = async (id: string, disabled: boolean) => {
+  disabled = async (id: string) => {
     const user = await this.findById(id);
-    await User.updateOne({ _id: user._id }, { disabled });
+    await User.updateOne({ _id: user._id }, { disabled: !user.disabled });
   };
 
   deleteById = async (id: string) => {

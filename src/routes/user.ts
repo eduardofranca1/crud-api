@@ -1,10 +1,16 @@
 import { Router } from "express";
 import { authenticate, validateSchema } from "../middlewares";
-import { createUserSchema, queryIdSchema, updateUserSchema } from "../schemas";
+import {
+  createUserSchema,
+  disabledUserSchema,
+  queryIdSchema,
+  updateUserSchema,
+} from "../schemas";
 import { UserController } from "../controllers";
 
 const router = Router();
 
+// *            $ref: '#/components/schemas/user/createUser'
 /**
  * @openapi
  * /user:
@@ -18,14 +24,32 @@ const router = Router();
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/user/createUser'
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *                example: Dudu
+ *              email:
+ *                 type: string
+ *                 example: "dudu@example.com"
+ *              password:
+ *                 type: string
+ *                 example: "123456"
+ *              confirmPassword:
+ *                 type: string
+ *                 example: "123456"
+ *            required:
+ *              - name
+ *              - email
+ *              - password
+ *              - confirmPassword
  *     responses:
  *       201:
- *         description: Created. Return user id
+ *         description: Created. Return _id, name and email.
  *       400:
- *         description: Bad request. Email already exists in the system
+ *         description: Bad request. Email already exists in the system.
  *       500:
- *         description: Internal Server Error
+ *         description: Internal Server Error.
  */
 router.post("/user", validateSchema(createUserSchema), UserController.create);
 
@@ -36,7 +60,7 @@ router.post("/user", validateSchema(createUserSchema), UserController.create);
  *     tags:
  *       - User
  *     summary: Find all users
- *     description: Find all users  registered in the system
+ *     description: Find all users registered in the system.
  *     responses:
  *       200:
  *         description: Ok
@@ -52,7 +76,7 @@ router.get("/user", authenticate, UserController.findAll);
  *     tags:
  *       - User
  *     summary: Find user by id
- *     description: Find user by id
+ *     description: Find a user by id.
  *     parameters:
  *     - in: query
  *       name: _id
@@ -63,13 +87,13 @@ router.get("/user", authenticate, UserController.findAll);
  *        format: uuid
  *     responses:
  *       200:
- *         description: Success. Return an user object
+ *         description: Success. Return a user object.
  *       400:
- *         description: Bad request. User id is required
+ *         description: Bad request. User id is required.
  *       404:
- *         description: User not found
+ *         description: User not found.
  *       500:
- *         description: Internal Server Error
+ *         description: Internal Server Error.
  */
 router.get(
   "/user/findById",
@@ -84,23 +108,41 @@ router.get(
  *   put:
  *     tags:
  *       - User
- *     summary: Update an user
+ *     summary: Update a user
+ *     parameters:
+ *      - in: query
+ *        name: _id
+ *        description: User id
+ *        required: true
+ *        schema:
+ *          type: string
+ *          format: uuid
  *     requestBody:
- *      description: To update an user
+ *      description: To update a user.
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/user/updateUser'
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *                example: Dudu Updated
+ *              email:
+ *                 type: string
+ *                 example: "duduupdated@example.com"
+ *            required:
+ *              - name
+ *              - email
  *     responses:
  *       200:
- *         description: Success. User updated
+ *         description: Success. User updated.
  *       400:
- *         description: Bad request. Email already exists in the system
+ *         description: Bad request. Email already exists in the system.
  *       404:
- *         description: User not found
+ *         description: User not found.
  *       500:
- *         description: Internal Server Error
+ *         description: Internal Server Error.
  */
 router.put(
   "/user",
@@ -111,11 +153,11 @@ router.put(
 
 /**
  * @openapi
- * /user/softDelete:
+ * /user/disabled:
  *   put:
  *     tags:
  *       - User
- *     summary: Disabled an user
+ *     summary: Disabled a user
  *     parameters:
  *      - in: query
  *        name: _id
@@ -124,15 +166,33 @@ router.put(
  *        schema:
  *          type: string
  *          format: uuid
+ *     requestBody:
+ *      description: To disabled a user.
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              disabled:
+ *                type: boolean
+ *                example: true
+ *            required:
+ *              - disabled
  *     responses:
- *       204:
- *         description: User was disabled
+ *       200:
+ *         description: User updated.
  *       404:
- *         description: User not found
+ *         description: User not found.
  *       500:
- *         description: Internal Server Error
+ *         description: Internal Server Error.
  */
-router.put("/user/softDelete", authenticate, UserController.softDelete);
+router.put(
+  "/user/disabled",
+  authenticate,
+  validateSchema(disabledUserSchema),
+  UserController.disabled
+);
 
 /**
  * @openapi
@@ -140,7 +200,7 @@ router.put("/user/softDelete", authenticate, UserController.softDelete);
  *   delete:
  *     tags:
  *       - User
- *     summary: Delete an user
+ *     summary: Delete a user
  *     parameters:
  *      - in: query
  *        name: _id
@@ -151,11 +211,11 @@ router.put("/user/softDelete", authenticate, UserController.softDelete);
  *          format: uuid
  *     responses:
  *       204:
- *         description: User was deleted
+ *         description: User was deleted.
  *       404:
- *         description: User not found
+ *         description: User not found.
  *       500:
- *         description: Internal Server Error
+ *         description: Internal Server Error.
  */
 router.delete(
   "/user",

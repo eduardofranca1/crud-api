@@ -1,10 +1,13 @@
 fix:
-erro no middleware de autenticação quando o token estiver inválido
-https://stackoverflow.com/questions/52122272/err-http-headers-sent-cannot-set-headers-after-they-are-sent-to-the-client
+
+- erro no middleware de autenticação quando o token estiver inválido ✔ = verificar função para melhorar
+  https://stackoverflow.com/questions/52122272/err-http-headers-sent-cannot-set-headers-after-they-are-sent-to-the-client
+
+- validar schema por params ou query quando o método for PUT ou POST
 
 tests:
 
-- unit test controller
+- unit test controller ✔
 
 validação de schemas:
 
@@ -14,8 +17,8 @@ schemas :
 - schema de query e params (id) ✔
 - schame com propriedade email colocar uma função para verificar se email já existe ✔
 - schema de criar usuário (adicionar confirm password, verificar se email já existe) ✔
-- schema de atualizar sennha
 
+- schema de atualizar sennha
 - schema de atualizar email do usuário pela rota de update
 
 rotas:
