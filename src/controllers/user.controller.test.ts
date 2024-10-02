@@ -50,4 +50,33 @@ describe("UserControllerTest", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockUser);
   });
+
+  it("should throw an exception and return 404", async () => {
+    (UserService.findById as jest.Mock).mockResolvedValue(null);
+
+    const response = await request(app).get(
+      "/user/findById?_id=66e03041e8902e1fc4c558cc"
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual("User not found");
+  });
+
+  it("should get a user list and return 200", async () => {
+    const mockUser = [
+      {
+        _id: "66e03041e8902e1fc4c558cc",
+        name: "Dudu",
+        email: "dudu@email.com",
+      },
+    ];
+
+    (UserService.findAll as jest.Mock).mockResolvedValue(mockUser);
+
+    const response = await request(app).get("/user");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockUser);
+    expect(response.body.length).toBe(1);
+  });
 });

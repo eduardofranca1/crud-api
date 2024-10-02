@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
-import { tokenSecret } from "../config/config";
+import { tokenSecret } from "../config";
 
 export const authenticate = async (
   request: Request,
@@ -12,6 +12,7 @@ export const authenticate = async (
   }
 
   const token = request.headers.authorization.split(" ")[1];
+  console.log("🚀 ~ token:", token);
 
   if (!token) {
     return response.status(401).json("Unauthorized.");

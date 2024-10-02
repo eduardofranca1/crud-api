@@ -1,8 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { tokenSecret } from "../../config/config";
-import Exception from "../../exceptions/exception";
-import { HttpStatus } from "../../exceptions/httpStatus";
+import { Exception, HttpStatus } from "../../exceptions";
 import { Auth } from "../../types";
 import User from "../../models/user";
 

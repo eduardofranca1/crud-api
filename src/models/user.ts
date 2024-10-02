@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { genSalt, hashSync } from "bcryptjs";
-import { User as UserSchema } from "../types/user";
+import { User as UserSchema } from "../types";
 
 const userSchema = new Schema<UserSchema>({
   name: {

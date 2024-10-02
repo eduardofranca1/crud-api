@@ -1,7 +1,6 @@
-import { HttpStatus } from "../../exceptions/httpStatus";
+import { Exception, HttpStatus } from "../../exceptions";
 import User from "../../models/user";
 import { CreateUser, UpdateUser } from "../../types";
-import Exception from "../../exceptions/exception";
 
 class UserService {
   create = async (object: CreateUser) => {
