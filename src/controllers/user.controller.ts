@@ -49,7 +49,7 @@ class UserController {
     try {
       const { _id } = request.query;
       const result = await UserService.findById(_id);
-      if (!result) return response.status(404).json("User not found");
+      if (!result) return response.status(404).json("User not found...");
       response.status(200).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);

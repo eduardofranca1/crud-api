@@ -1,3 +1,7 @@
+fix:
+erro no middleware de autenticação quando o token estiver inválido
+https://stackoverflow.com/questions/52122272/err-http-headers-sent-cannot-set-headers-after-they-are-sent-to-the-client
+
 tests:
 
 - unit test controller
@@ -20,6 +24,7 @@ rotas:
 
 middlewares:
 
+- middleware de erros
 - criar middleware de autorização
 
 node modules:

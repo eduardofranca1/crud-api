@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import moment from "moment-timezone";
 import { genSalt, hashSync } from "bcryptjs";
 import { User as UserSchema } from "../types";
 
@@ -41,6 +42,9 @@ userSchema.pre("save", async function (next) {
 
   user.password = hash;
 
+  user.createdAt = moment().tz("America/Maceio").format("YYYY-MM-DDTHH:mm:ss");
+  user.updatedAt = moment().tz("America/Maceio").format("YYYY-MM-DDTHH:mm:ss");
+
   next();
 });
 
@@ -55,7 +59,11 @@ userSchema.pre("updateOne", async function (next) {
     user._update.password = hash;
   }
 
-  return next();
+  user._update.updatedAt = moment()
+    .tz("America/Maceio")
+    .format("YYYY-MM-DDTHH:mm:ss");
+
+  next();
 });
 
 const User = model("users", userSchema);

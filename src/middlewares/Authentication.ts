@@ -12,7 +12,6 @@ export const authenticate = async (
   }
 
   const token = request.headers.authorization.split(" ")[1];
-  console.log("🚀 ~ token:", token);
 
   if (!token) {
     return response.status(401).json("Unauthorized.");
@@ -20,10 +19,14 @@ export const authenticate = async (
 
   try {
     verify(token, tokenSecret, (error, userId) => {
-      response.locals.userId = userId;
+      if (error) {
+        return response.status(401).json("Unauthorized.");
+      } else {
+        response.locals.userId = userId;
+        next();
+      }
     });
-    return next();
   } catch (error) {
-    return response.status(401).json("Unauthorized.");
+    response.status(401).json("Unauthorized.");
   }
 };
