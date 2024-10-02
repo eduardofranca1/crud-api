@@ -4,6 +4,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 
 import UserRouter from "./routes/user";
+import AuthRouter from "./routes/auth";
 import { mongodb, openapiSpecification } from "./config";
 
 mongoose.connect(mongodb);
@@ -17,6 +18,7 @@ server.use(express.json());
 server.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 server.use(UserRouter);
+server.use(AuthRouter);
 
 server.listen(process.env.PORT ?? 3001, () => {
   console.log(`server running on ${process.env.PORT ?? 3001}`);

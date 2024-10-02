@@ -21,6 +21,7 @@
 - Soft Delete
 
 - Next steps:
+  - Error Handling
   - Authorization
   - Log
 

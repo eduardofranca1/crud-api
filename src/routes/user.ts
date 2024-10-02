@@ -1,38 +1,9 @@
 import { Router } from "express";
 import { authenticate, validateSchema } from "../middlewares";
-import {
-  authSchema,
-  createUserSchema,
-  queryIdSchema,
-  updateUserSchema,
-} from "../schemas";
-import UserController from "../controllers/user.controller";
+import { createUserSchema, queryIdSchema, updateUserSchema } from "../schemas";
+import { UserController } from "../controllers";
 
 const router = Router();
-
-/**
- * @openapi
- * /login:
- *   post:
- *     tags:
- *       - User
- *     summary: User login
- *     requestBody:
- *      description: To user sign in the system
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/login'
- *     responses:
- *       200:
- *         description: Success. Return JWT
- *       401:
- *         description: Unauthorized. Email or password incorrect
- *       500:
- *         description: Internal Server Error
- */
-router.post("/login", validateSchema(authSchema), UserController.login);
 
 /**
  * @openapi
@@ -47,7 +18,7 @@ router.post("/login", validateSchema(authSchema), UserController.login);
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/user'
+ *            $ref: '#/components/schemas/user/createUser'
  *     responses:
  *       201:
  *         description: Created. Return user id
@@ -120,7 +91,7 @@ router.get(
  *      content:
  *        application/json:
  *          schema:
- *            $ref: '#/components/schemas/updateUser'
+ *            $ref: '#/components/schemas/user/updateUser'
  *     responses:
  *       200:
  *         description: Success. User updated

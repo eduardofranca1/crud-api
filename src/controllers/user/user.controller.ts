@@ -1,24 +1,13 @@
 import { Request, Response } from "express";
-import { AuthenticationService, UserService } from "../services";
+import { UserService } from "../../services";
 import {
-  AuthSchema,
   CreateUserSchema,
   UpdateUserSchema,
   QueryIdSchema,
   DisabledUserSchema,
-} from "../schemas";
+} from "../../schemas";
 
 class UserController {
-  async login(request: Request<{}, {}, AuthSchema>, response: Response) {
-    try {
-      const { email, password } = request.body;
-      const result = await AuthenticationService.login({ email, password });
-      response.status(200).json(result);
-    } catch (error: any) {
-      response.status(error.code).json(error.message);
-    }
-  }
-
   async create(request: Request<{}, {}, CreateUserSchema>, response: Response) {
     try {
       const { name, email, password } = request.body;
@@ -49,7 +38,6 @@ class UserController {
     try {
       const { _id } = request.query;
       const result = await UserService.findById(_id);
-      if (!result) return response.status(404).json("User not found...");
       response.status(200).json(result);
     } catch (error: any) {
       response.status(error.code).json(error.message);
@@ -81,7 +69,7 @@ class UserController {
       const { _id } = request.query;
       const { disabled } = request.body;
       await UserService.softDelete(_id, disabled);
-      response.sendStatus(200);
+      response.status(200).json("User disabled");
     } catch (error: any) {
       response.status(error.code).json(error.message);
     }

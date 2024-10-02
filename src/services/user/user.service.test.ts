@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import User from "../../models/user";
 import UserService from "./user.service";
-import { mongodb } from "../../config";
+import { mongodbTest } from "../../config";
 
 describe("UserServiceTest", () => {
   beforeAll(async () => {
-    await mongoose.connect(mongodb);
+    await mongoose.connect(mongodbTest);
   });
 
   afterEach(async () => {
@@ -115,6 +115,26 @@ describe("UserServiceTest", () => {
         email: userNumberTwo.email,
       })
     ).rejects.toThrow("Email already exists");
+  });
+
+  it("should disabled a user", async () => {
+    const user = await UserService.create({
+      name: "Dudu",
+      email: "dudu@email",
+      password: "123456",
+    });
+
+    const disabledUser = await UserService.softDelete(
+      user._id.toString(),
+      true
+    );
+    expect(disabledUser).not.toBeInstanceOf(Error);
+  });
+
+  it("should throw an exception when trying to disabled a non-existing user", async () => {
+    await expect(
+      UserService.softDelete("66e03041e8902e1fc4c558ca", true)
+    ).rejects.toThrow("User not found");
   });
 
   it("should delete a user", async () => {
