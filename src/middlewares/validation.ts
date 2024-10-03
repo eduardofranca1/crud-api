@@ -30,17 +30,18 @@ const handleErrors = (errorsZod: ErrorZod[]) => {
 };
 
 export const validateSchema =
-  (schema: ZodSchema<any>) =>
+  (schema: ZodSchema<any>, requestType: "body" | "params" | "query") =>
   async (request: Request, response: Response, next: NextFunction) => {
     try {
-      switch (request.method) {
-        case "GET":
-        case "DELETE":
-          await schema.parseAsync(request.query);
-          break;
-        case "POST":
-        case "PUT":
+      switch (requestType) {
+        case "body":
           await schema.parseAsync(request.body);
+          break;
+        case "params":
+          await schema.parseAsync(request.params);
+          break;
+        case "query":
+          await schema.parseAsync(request.query);
           break;
       }
       next();

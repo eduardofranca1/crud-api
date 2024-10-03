@@ -3,8 +3,7 @@ import { UserService } from "../../services";
 import {
   CreateUserSchema,
   UpdateUserSchema,
-  QueryIdSchema,
-  DisabledUserSchema,
+  RequestIdSchema,
 } from "../../schemas";
 
 class UserController {
@@ -32,7 +31,7 @@ class UserController {
   }
 
   async findById(
-    request: Request<{}, {}, {}, QueryIdSchema>,
+    request: Request<{}, {}, {}, RequestIdSchema>,
     response: Response
   ) {
     try {
@@ -45,7 +44,7 @@ class UserController {
   }
 
   async update(
-    request: Request<{}, {}, UpdateUserSchema, QueryIdSchema>,
+    request: Request<{}, {}, UpdateUserSchema, RequestIdSchema>,
     response: Response
   ) {
     try {
@@ -63,11 +62,11 @@ class UserController {
   }
 
   async disabled(
-    request: Request<{}, {}, DisabledUserSchema>,
+    request: Request<{}, {}, {}, RequestIdSchema>,
     response: Response
   ) {
     try {
-      const { _id } = request.body;
+      const { _id } = request.query;
       await UserService.disabled(_id);
       response.status(200).json("User updated");
     } catch (error: any) {
@@ -76,7 +75,7 @@ class UserController {
   }
 
   async delete(
-    request: Request<{}, {}, {}, QueryIdSchema>,
+    request: Request<{}, {}, {}, RequestIdSchema>,
     response: Response
   ) {
     try {

@@ -27,6 +27,6 @@ const router = Router();
  *       500:
  *         description: Internal Server Error
  */
-router.post("/login", validateSchema(authSchema), AuthController.login);
+router.post("/login", validateSchema(authSchema, "body"), AuthController.login);
 
 export default router;

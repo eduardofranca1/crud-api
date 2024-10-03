@@ -1,9 +1,8 @@
-import { Router } from "express";
+import { query, Router } from "express";
 import { authenticate, validateSchema } from "../middlewares";
 import {
   createUserSchema,
-  disabledUserSchema,
-  queryIdSchema,
+  requestIdSchema,
   updateUserSchema,
 } from "../schemas";
 import { UserController } from "../controllers";
@@ -51,7 +50,11 @@ const router = Router();
  *       500:
  *         description: Internal Server Error.
  */
-router.post("/user", validateSchema(createUserSchema), UserController.create);
+router.post(
+  "/user",
+  validateSchema(createUserSchema, "body"),
+  UserController.create
+);
 
 /**
  * @openapi
@@ -98,7 +101,7 @@ router.get("/user", authenticate, UserController.findAll);
 router.get(
   "/user/findById",
   authenticate,
-  validateSchema(queryIdSchema),
+  validateSchema(requestIdSchema, "query"),
   UserController.findById
 );
 
@@ -147,7 +150,8 @@ router.get(
 router.put(
   "/user",
   authenticate,
-  validateSchema(updateUserSchema),
+  validateSchema(requestIdSchema, "query"),
+  validateSchema(updateUserSchema, "body"),
   UserController.update
 );
 
@@ -190,7 +194,7 @@ router.put(
 router.put(
   "/user/disabled",
   authenticate,
-  validateSchema(disabledUserSchema),
+  validateSchema(requestIdSchema, "query"),
   UserController.disabled
 );
 
@@ -220,7 +224,7 @@ router.put(
 router.delete(
   "/user",
   authenticate,
-  validateSchema(queryIdSchema),
+  validateSchema(requestIdSchema, "query"),
   UserController.delete
 );
 
