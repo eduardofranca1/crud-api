@@ -9,11 +9,13 @@ const options = {
       version: "1.0.0",
       contact: {
         name: "Eduardo França",
-        email: "francaedu98@gmail.com",
         url: "https://www.linkedin.com/in/eduardofrancaa/",
       },
     },
     tags: [
+      {
+        name: "Auth",
+      },
       {
         name: "User",
       },
@@ -38,7 +40,7 @@ const options = {
             },
           },
         },
-        user: {
+        createUser: {
           type: "object",
           required: ["name", "email", "password"],
           properties: {

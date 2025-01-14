@@ -1,22 +1,32 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
-import { tokenSecret } from "../config/Config";
+import { tokenSecret } from "../config";
 
-export default function ensureUserAuthenticated(
+export const authenticate = async (
   request: Request,
   response: Response,
   next: NextFunction
-) {
-  const authToken = request.headers.authorization;
+) => {
+  if (!request.headers.authorization) {
+    return response.status(401).json("Unauthorized.");
+  }
 
-  if (!authToken) {
+  const token = request.headers.authorization.split(" ")[1];
+
+  if (!token) {
     return response.status(401).json("Unauthorized.");
   }
 
   try {
-    verify(authToken, tokenSecret);
-    return next();
+    verify(token, tokenSecret, (error, userId) => {
+      if (error) {
+        return response.status(401).json("Unauthorized.");
+      } else {
+        response.locals.userId = userId;
+        next();
+      }
+    });
   } catch (error) {
-    return response.status(401).json("Unauthorized.");
+    response.status(401).json("Unauthorized.");
   }
-}
+};

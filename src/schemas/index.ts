@@ -1,7 +1,4 @@
-export { LoginSchema, loginSchema } from "./LoginSchema";
-export {
-  UserSchema,
-  userSchema,
-  UserSchemaQuery,
-  userSchemaQuery,
-} from "./UserSchema";
+export * from "./auth/auth";
+export * from "./request/id";
+export * from "./user/createUser";
+export * from "./user/updateUser";
