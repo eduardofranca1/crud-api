@@ -21,9 +21,13 @@
 - Soft Delete
 
 - Next steps:
-  - Error Handling
+  - Add Docker
+  - Tests for MongoDB
+  - Middleware Error Handling
   - Authorization
   - Log
+  - Schemas:
+    - Password update
 
 ### How to execute:
 
