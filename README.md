@@ -1,4 +1,4 @@
-# Node API Rest
+# Node REST API
 
 ## Crud API using Node.js, Express, Mongoose, TypeScript and Jest
 
@@ -12,7 +12,7 @@
 
 ### Features
 
-- Unit Tests using [Jest](https://jestjs.io/pt-BR/);
+- Unit Tests using [Jest](https://jestjs.io/pt-BR/)
 - API Documentation using [Swagger](https://swagger.io/)
 - Authentication using [Json Web Token (JWT)](https://www.npmjs.com/package/jsonwebtoken)
 - Data Validation using [Zod](https://zod.dev/)
@@ -23,15 +23,16 @@
 - Next steps:
   - Add Docker
   - Tests for MongoDB
-  - Middleware Error Handling
-  - Authorization
-  - Log
-  - Schemas:
-    - Password update
+  - Middlewares
+    - Error Handling
+    - Authorization
+    - Logger
+  - Schemas
+    - Update password
 
 ### How to execute:
 
 - **npm install** (to install node modules)
 - **npm run dev** (to start the server)
-- **npm run test** (to execute the tests)
-- **npm run build** (to execute the build)
+- **npm run test** (to run the tests)
+- **npm run build** (to build the project)
