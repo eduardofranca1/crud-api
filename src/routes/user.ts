@@ -1,22 +1,22 @@
-import { query, Router } from "express";
+import { Router } from "express";
 import { authenticate, validateSchema } from "../middlewares";
 import {
   createUserSchema,
   requestIdSchema,
+  updatePasswordSchema,
   updateUserSchema,
 } from "../schemas";
 import { UserController } from "../controllers";
 
 const router = Router();
 
-// *            $ref: '#/components/schemas/user/createUser'
 /**
  * @openapi
  * /user:
  *   post:
  *     tags:
  *       - User
- *     summary: Create new user
+ *     summary: Create a new user
  *     requestBody:
  *      description: To register a new user
  *      required: true
@@ -30,7 +30,7 @@ const router = Router();
  *                example: Dudu
  *              email:
  *                 type: string
- *                 example: "dudu@example.com"
+ *                 example: "dudu@email.com"
  *              password:
  *                 type: string
  *                 example: "123456"
@@ -74,7 +74,7 @@ router.get("/user", authenticate, UserController.findAll);
 
 /**
  * @openapi
- * /user/findById:
+ * /user/findById/:_id:
  *   get:
  *     tags:
  *       - User
@@ -107,58 +107,8 @@ router.get(
 
 /**
  * @openapi
- * /user:
- *   put:
- *     tags:
- *       - User
- *     summary: Update a user
- *     parameters:
- *      - in: params
- *        name: _id
- *        description: User id
- *        required: true
- *        schema:
- *          type: string
- *          format: uuid
- *     requestBody:
- *      description: To update a user.
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              name:
- *                type: string
- *                example: Dudu Updated
- *              email:
- *                 type: string
- *                 example: "duduupdated@example.com"
- *            required:
- *              - name
- *              - email
- *     responses:
- *       200:
- *         description: Success. User updated.
- *       400:
- *         description: Bad request. Email already exists in the system.
- *       404:
- *         description: User not found.
- *       500:
- *         description: Internal Server Error.
- */
-router.put(
-  "/user/:_id",
-  authenticate,
-  validateSchema(requestIdSchema, "params"),
-  validateSchema(updateUserSchema, "body"),
-  UserController.update
-);
-
-/**
- * @openapi
- * /user/disabled:
- *   put:
+ * /user/disabled/:_id:
+ *   get:
  *     tags:
  *       - User
  *     summary: Disabled a user
@@ -191,7 +141,7 @@ router.put(
  *       500:
  *         description: Internal Server Error.
  */
-router.put(
+router.get(
   "/user/disabled/:_id",
   authenticate,
   validateSchema(requestIdSchema, "params"),
@@ -200,7 +150,111 @@ router.put(
 
 /**
  * @openapi
- * /user:
+ * /user/:_id:
+ *   put:
+ *     tags:
+ *       - User
+ *     summary: Update a user
+ *     parameters:
+ *      - in: params
+ *        name: _id
+ *        description: User id
+ *        required: true
+ *        schema:
+ *          type: string
+ *          format: uuid
+ *     requestBody:
+ *      description: To update a user.
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              name:
+ *                type: string
+ *                example: Update name
+ *              email:
+ *                 type: string
+ *                 example: "update@email.com"
+ *            required:
+ *              - name
+ *              - email
+ *     responses:
+ *       200:
+ *         description: Success. User updated.
+ *       400:
+ *         description: Bad request. Email already exists in the system.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+router.put(
+  "/user/:_id",
+  authenticate,
+  validateSchema(requestIdSchema, "params"),
+  validateSchema(updateUserSchema, "body"),
+  UserController.update
+);
+
+/**
+ * @openapi
+ * /user/updatePassword/:_id:
+ *   put:
+ *     tags:
+ *       - User
+ *     summary: Update user password
+ *     parameters:
+ *      - in: params
+ *        name: _id
+ *        description: User id
+ *        required: true
+ *        schema:
+ *          type: string
+ *          format: uuid
+ *     requestBody:
+ *      description: Update user password.
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              oldPassword:
+ *                type: string
+ *                example: "123456"
+ *              newPassword:
+ *                 type: string
+ *                 example: "654321"
+ *              confirmNewPassword:
+ *                 type: string
+ *                 example: "654321"
+ *            required:
+ *              - oldPassword
+ *              - newPassword
+ *              - confirmNewPassword
+ *     responses:
+ *       200:
+ *         description: Success. Password updated.
+ *       400:
+ *         description: Bad request. Passwords don't match.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Internal Server Error.
+ */
+router.put(
+  "/user/updatePassword/:_id",
+  authenticate,
+  validateSchema(requestIdSchema, "params"),
+  validateSchema(updatePasswordSchema, "body"),
+  UserController.updatePassword
+);
+
+/**
+ * @openapi
+ * /user/:_id:
  *   delete:
  *     tags:
  *       - User

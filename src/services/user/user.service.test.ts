@@ -82,11 +82,11 @@ describe("UserServiceTest", () => {
       email: "dudu@email",
       password: "123456",
     });
-    const updatedUser = await UserService.updateById(user._id.toString(), {
+    const result = await UserService.updateById(user._id.toString(), {
       name: "Dudu Updated",
       email: "dudu.updated@email.com",
     });
-    expect(updatedUser).not.toBeInstanceOf(Error);
+    expect(result).not.toBeInstanceOf(Error);
   });
 
   it("should throw an exception when trying to update a non-existing user by id", async () => {
@@ -104,17 +104,34 @@ describe("UserServiceTest", () => {
       email: "duduone@email",
       password: "123456",
     });
+
     const userNumberTwo = await UserService.create({
       name: "Dudu",
       email: "dudutwo@email",
       password: "123456",
     });
+
     await expect(
       UserService.updateById(userNumberOne._id.toString(), {
         name: "Dudu Updated",
         email: userNumberTwo.email,
       })
     ).rejects.toThrow("Email already exists");
+  });
+
+  it("should update user password", async () => {
+    const user = await UserService.create({
+      name: "Dudu",
+      email: "dudu@email",
+      password: "123456",
+    });
+
+    const result = await UserService.updatePassword(user._id.toString(), {
+      oldPassword: "123456",
+      newPassword: "654321",
+    });
+
+    expect(result).not.toBeInstanceOf(Error);
   });
 
   it("should disabled a user", async () => {

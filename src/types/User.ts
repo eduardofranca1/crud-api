@@ -7,13 +7,13 @@ export interface User {
   disabled: boolean;
 }
 
-export type UpdateUser = Omit<
-  User,
-  "password" | "disabled" | "createdAt" | "updatedAt"
->;
+export interface UpdateUser {
+  name: string;
+  email: string;
+}
 
-export type CreateUser = {
+export interface CreateUser {
   name: string;
   email: string;
   password: string;
-};
+}

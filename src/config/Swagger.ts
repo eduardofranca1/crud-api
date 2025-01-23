@@ -53,9 +53,8 @@ const options = {
             password: {
               type: "string",
             },
-            disabled: {
-              type: "boolean",
-              default: false,
+            confirmPassword: {
+              type: "string",
             },
           },
         },
@@ -72,7 +71,22 @@ const options = {
             email: {
               type: "string",
             },
-            password: {
+          },
+        },
+        updateUserPassword: {
+          type: "object",
+          required: ["_id", "oldPassword", "newPassword", "confirmNewPassword"],
+          properties: {
+            _id: {
+              type: "string",
+            },
+            oldPassword: {
+              type: "string",
+            },
+            newPassword: {
+              type: "string",
+            },
+            confirmNewPassword: {
               type: "string",
             },
           },

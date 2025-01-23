@@ -4,6 +4,7 @@ import {
   CreateUserSchema,
   UpdateUserSchema,
   RequestIdSchema,
+  UpdatePasswordSchema,
 } from "../../schemas";
 
 class UserController {
@@ -52,6 +53,20 @@ class UserController {
         email,
       });
       response.status(200).json("Your account has been updated!");
+    } catch (error: any) {
+      response.status(error.code).json(error.message);
+    }
+  }
+
+  async updatePassword(
+    request: Request<RequestIdSchema, {}, UpdatePasswordSchema>,
+    response: Response
+  ) {
+    try {
+      const { _id } = request.params;
+      const { oldPassword, newPassword } = request.body;
+      await UserService.updatePassword(_id, { oldPassword, newPassword });
+      response.status(200).json("OK");
     } catch (error: any) {
       response.status(error.code).json(error.message);
     }

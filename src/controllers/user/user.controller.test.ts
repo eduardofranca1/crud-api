@@ -21,7 +21,7 @@ describe("UserControllerTest", () => {
     jest.clearAllMocks();
   });
 
-  it("should create a user and return 201 status.", async () => {
+  it("should return status 200 when creating a new user.", async () => {
     const mockUser = {
       _id: "66e03041e8902e1fc4c558cc",
       name: "Dudu",
@@ -36,7 +36,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual(mockUser);
   });
 
-  it("should get a user by id and return 200 status.", async () => {
+  it("should return status 200 when getting a user by id.", async () => {
     const mockUser = {
       _id: "66e03041e8902e1fc4c558cc",
       name: "Dudu",
@@ -53,7 +53,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual(mockUser);
   });
 
-  it("should return 404 status if the user is not found.", async () => {
+  it("should return status 404 when the user retrieved by ID is not found.", async () => {
     UserService.findById = jest
       .fn()
       .mockRejectedValue(new Exception("User not found", 404));
@@ -66,7 +66,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual("User not found");
   });
 
-  it("should get a user list and return 200 status.", async () => {
+  it("should return status 200 when getting a user list.", async () => {
     const mockUser = [
       {
         _id: "66e03041e8902e1fc4c558cc",
@@ -84,7 +84,7 @@ describe("UserControllerTest", () => {
     expect(response.body.length).toBe(1);
   });
 
-  it("should update a user and return 200 status.", async () => {
+  it("should return status 200 when updating a user.", async () => {
     const mockUser = {
       name: "Dudu",
       email: "dudu@email.com",
@@ -100,7 +100,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual("Your account has been updated!");
   });
 
-  it("should return a 404 status if the user to update is not found.", async () => {
+  it("should return a status 404 when the user to update is not found.", async () => {
     UserService.updateById = jest
       .fn()
       .mockRejectedValue(new Exception("User not found", 404));
@@ -113,7 +113,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual("User not found");
   });
 
-  it("should return a 400 status if updating a user with an existing email.", async () => {
+  it("should return status 400 when updating a user with an existing email.", async () => {
     UserService.updateById = jest
       .fn()
       .mockRejectedValue(new Exception("Email already exists", 400));
@@ -126,7 +126,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual("Email already exists");
   });
 
-  it("should disabled a user and return 200 status.", async () => {
+  it("should return status 200 when disabling a user.", async () => {
     const response = await request(app).put(
       "/user/disabled?_id=66e03041e8902e1fc4c558cc"
     );
@@ -134,7 +134,7 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual("User updated");
   });
 
-  it("should return a 404 status if the user to disabled is not found.", async () => {
+  it("should return status 404 if the user to be disabled is not found.", async () => {
     UserService.disabled = jest
       .fn()
       .mockRejectedValue(new Exception("User not found", 404));
@@ -145,14 +145,14 @@ describe("UserControllerTest", () => {
     expect(response.body).toEqual("User not found");
   });
 
-  it("should delete a user by id and return 204 status.", async () => {
+  it("should return status 204 when deleting a user by id.", async () => {
     const response = await request(app).delete(
       "/user?_id=66e03041e8902e1fc4c558cc"
     );
     expect(response.status).toBe(204);
   });
 
-  it("should return a 404 status if the user to delete is not found.", async () => {
+  it("should return status 404 if the user to be deleted is not found.", async () => {
     UserService.deleteById = jest
       .fn()
       .mockRejectedValue(new Exception("User not found", 404));

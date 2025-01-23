@@ -43,7 +43,6 @@ userSchema.pre("save", async function (next) {
   user.password = hash;
 
   user.createdAt = moment().tz("America/Maceio").format("YYYY-MM-DDTHH:mm:ss");
-  user.updatedAt = moment().tz("America/Maceio").format("YYYY-MM-DDTHH:mm:ss");
 
   next();
 });
