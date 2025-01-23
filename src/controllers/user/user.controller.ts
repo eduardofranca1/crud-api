@@ -30,12 +30,9 @@ class UserController {
     }
   }
 
-  async findById(
-    request: Request<{}, {}, {}, RequestIdSchema>,
-    response: Response
-  ) {
+  async findById(request: Request<RequestIdSchema>, response: Response) {
     try {
-      const { _id } = request.query;
+      const { _id } = request.params;
       const result = await UserService.findById(_id);
       response.status(200).json(result);
     } catch (error: any) {
@@ -44,12 +41,11 @@ class UserController {
   }
 
   async update(
-    request: Request<{}, {}, UpdateUserSchema, RequestIdSchema>,
+    request: Request<RequestIdSchema, {}, UpdateUserSchema>,
     response: Response
   ) {
     try {
-      const { _id } = request.query;
-      // if (!_id) return response.status(400).json("User id is required.");
+      const { _id } = request.params;
       const { name, email } = request.body;
       await UserService.updateById(_id, {
         name,
@@ -61,12 +57,9 @@ class UserController {
     }
   }
 
-  async disabled(
-    request: Request<{}, {}, {}, RequestIdSchema>,
-    response: Response
-  ) {
+  async disabled(request: Request<RequestIdSchema>, response: Response) {
     try {
-      const { _id } = request.query;
+      const { _id } = request.params;
       await UserService.disabled(_id);
       response.status(200).json("User updated");
     } catch (error: any) {
@@ -74,12 +67,9 @@ class UserController {
     }
   }
 
-  async delete(
-    request: Request<{}, {}, {}, RequestIdSchema>,
-    response: Response
-  ) {
+  async delete(request: Request<RequestIdSchema>, response: Response) {
     try {
-      const { _id } = request.query;
+      const { _id } = request.params;
       await UserService.deleteById(_id);
       response.sendStatus(204);
     } catch (error: any) {

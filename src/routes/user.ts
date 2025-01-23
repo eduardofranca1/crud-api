@@ -81,7 +81,7 @@ router.get("/user", authenticate, UserController.findAll);
  *     summary: Find user by id
  *     description: Find a user by id.
  *     parameters:
- *     - in: query
+ *     - in: params
  *       name: _id
  *       description: User id
  *       required: true
@@ -99,9 +99,9 @@ router.get("/user", authenticate, UserController.findAll);
  *         description: Internal Server Error.
  */
 router.get(
-  "/user/findById",
+  "/user/findById/:_id",
   authenticate,
-  validateSchema(requestIdSchema, "query"),
+  validateSchema(requestIdSchema, "params"),
   UserController.findById
 );
 
@@ -113,7 +113,7 @@ router.get(
  *       - User
  *     summary: Update a user
  *     parameters:
- *      - in: query
+ *      - in: params
  *        name: _id
  *        description: User id
  *        required: true
@@ -148,9 +148,9 @@ router.get(
  *         description: Internal Server Error.
  */
 router.put(
-  "/user",
+  "/user/:_id",
   authenticate,
-  validateSchema(requestIdSchema, "query"),
+  validateSchema(requestIdSchema, "params"),
   validateSchema(updateUserSchema, "body"),
   UserController.update
 );
@@ -163,7 +163,7 @@ router.put(
  *       - User
  *     summary: Disabled a user
  *     parameters:
- *      - in: query
+ *      - in: params
  *        name: _id
  *        description: User id
  *        required: true
@@ -192,9 +192,9 @@ router.put(
  *         description: Internal Server Error.
  */
 router.put(
-  "/user/disabled",
+  "/user/disabled/:_id",
   authenticate,
-  validateSchema(requestIdSchema, "query"),
+  validateSchema(requestIdSchema, "params"),
   UserController.disabled
 );
 
@@ -222,9 +222,9 @@ router.put(
  *         description: Internal Server Error.
  */
 router.delete(
-  "/user",
+  "/user/:_id",
   authenticate,
-  validateSchema(requestIdSchema, "query"),
+  validateSchema(requestIdSchema, "params"),
   UserController.delete
 );
 

@@ -29,15 +29,15 @@ class UserService {
     return user;
   };
 
-  updateById = async (id: string, update: UpdateUser) => {
+  updateById = async (id: string, dataToUpdate: UpdateUser) => {
     const user = await this.findById(id);
-    if (user.email !== update.email) {
-      const emailExists = await User.findOne({ email: update.email });
+    if (user.email !== dataToUpdate.email) {
+      const emailExists = await User.findOne({ email: dataToUpdate.email });
       if (emailExists) {
         throw new Exception("Email already exists", HttpStatus.BAD_REQUEST);
       }
     }
-    await User.updateOne({ _id: user._id }, update);
+    await User.updateOne({ _id: user._id }, dataToUpdate);
   };
 
   disabled = async (id: string) => {
