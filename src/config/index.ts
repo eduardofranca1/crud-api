@@ -1,2 +1,2 @@
-export * from "./swagger";
-export * from "./config";
+export * from "./Swagger";
+export * from "./Config";

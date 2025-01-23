@@ -1,4 +1,4 @@
-import { HttpStatus } from "./httpStatus";
+import { HttpStatus } from "./HttpStatus";
 
 class Exception extends Error {
   code: HttpStatus;
