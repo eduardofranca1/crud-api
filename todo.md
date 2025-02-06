@@ -21,12 +21,12 @@ schemas :
 - schama com propriedade email colocar uma função para verificar se email já existe ✅
 - schema de criar usuário (adicionar confirm password, verificar se email já existe) ✅
 
-- schema de atualizar sennha ❌
+- schema de atualizar sennha ✅
 - schema de atualizar email do usuário pela rota de update ❌
 
 rotas:
 
-- rota de atualizar senha ❌
+- rota de atualizar senha ✅
 
 middlewares:
 

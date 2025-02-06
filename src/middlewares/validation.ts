@@ -32,20 +32,28 @@ const handleErrors = (errorsZod: ErrorZod[]) => {
 export const validateSchema =
   (schema: ZodSchema<any>, requestType: "body" | "params" | "query") =>
   async (request: Request, response: Response, next: NextFunction) => {
+    console.log("🚀 ~ request:", request.body);
+    console.log(requestType);
     try {
+      console.log("aqui");
       switch (requestType) {
         case "body":
+          console.log("aqui 2");
           await schema.parseAsync(request.body);
           break;
         case "params":
+          console.log("aqui 3");
           await schema.parseAsync(request.params);
           break;
         case "query":
+          console.log("aqui 4");
           await schema.parseAsync(request.query);
           break;
       }
+      console.log("aqui 5");
       next();
     } catch (error: any) {
+      console.log("🚀 ~ error:", error);
       response.status(400).json(handleErrors(error.errors));
     }
   };
