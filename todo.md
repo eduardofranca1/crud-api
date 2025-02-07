@@ -22,7 +22,7 @@ schemas :
 - schema de criar usuário (adicionar confirm password, verificar se email já existe) ✅
 
 - schema de atualizar sennha ✅
-- schema de atualizar email do usuário pela rota de update ❌
+- schema de atualizar email do usuário pela rota de update ✅
 
 rotas:
 
