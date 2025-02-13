@@ -1,3 +1,2 @@
-export { authenticate } from "./authentication";
-export { validateSchema } from "./validation";
-export { errorHandler } from "./errorHandler";
+export { authenticate } from "./authenticate-user";
+export { validateSchema } from "./validation-schema";

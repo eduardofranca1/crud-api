@@ -2,6 +2,8 @@
 
 ## Crud API using Node.js, Express, Mongoose, TypeScript and Jest
 
+This is a simple example of **CRUD (Create, Read, Update, and Delete) user operations**.
+
 ### Technologies:
 
 - [Express](https://expressjs.com/pt-br/)
@@ -27,10 +29,8 @@
     - Error Handling
     - Authorization
     - Logger
-  - Schemas
-    - Update password
 
-### How to execute:
+### How to run the project
 
 - **npm install** (to install node modules)
 - **npm run dev** (to start the server)

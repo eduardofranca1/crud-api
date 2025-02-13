@@ -1,5 +1,5 @@
 import { compare } from "bcryptjs";
-import { Exception, HttpStatus } from "../../exceptions";
+import { Exception, HttpEnumStatusCode } from "../../exceptions";
 import User from "../../models/user";
 import { CreateUser, UpdateUser } from "../../types";
 import { UpdatePassword } from "../../types/password";
@@ -21,13 +21,15 @@ class UserService {
     const user = await User.findOne({ _id }).select(
       options?.select ?? undefined
     );
-    if (!user) throw new Exception("User not found", HttpStatus.NOT_FOUND);
+    if (!user)
+      throw new Exception("User not found", HttpEnumStatusCode.NOT_FOUND);
     return user;
   };
 
   findByEmail = async (email: string) => {
     const user = await User.findOne({ email: email, disabled: false });
-    if (!user) throw new Exception("User not found", HttpStatus.NOT_FOUND);
+    if (!user)
+      throw new Exception("User not found", HttpEnumStatusCode.NOT_FOUND);
     return user;
   };
 
@@ -36,7 +38,10 @@ class UserService {
     if (user.email !== dataToUpdate.email) {
       const emailExists = await User.findOne({ email: dataToUpdate.email });
       if (emailExists) {
-        throw new Exception("Email already exists", HttpStatus.BAD_REQUEST);
+        throw new Exception(
+          "Email already exists",
+          HttpEnumStatusCode.BAD_REQUEST
+        );
       }
     }
     await User.updateOne({ _id: user._id }, dataToUpdate);
@@ -51,7 +56,10 @@ class UserService {
     );
 
     if (!passwordMatch) {
-      throw new Exception("Passwords don't match", HttpStatus.BAD_REQUEST);
+      throw new Exception(
+        "Passwords don't match",
+        HttpEnumStatusCode.BAD_REQUEST
+      );
     }
 
     await User.updateOne({ _id: id }, { password: objectPassword.newPassword });

@@ -1,7 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { tokenSecret } from "../../config";
-import { Exception, HttpStatus } from "../../exceptions";
+import { Exception, HttpEnumStatusCode } from "../../exceptions";
 import { Auth } from "../../types";
 import User from "../../models/user";
 
@@ -12,7 +12,7 @@ class AuthenticationService {
     if (!user)
       throw new Exception(
         "Email or password incorrect.",
-        HttpStatus.UNAUTHORIZED
+        HttpEnumStatusCode.UNAUTHORIZED
       );
 
     const passwordMatch = await compare(password, user.password);
@@ -20,7 +20,7 @@ class AuthenticationService {
     if (!passwordMatch)
       throw new Exception(
         "Email or password incorrect.",
-        HttpStatus.UNAUTHORIZED
+        HttpEnumStatusCode.UNAUTHORIZED
       );
 
     const token = sign(
