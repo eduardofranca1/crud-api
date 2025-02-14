@@ -5,7 +5,7 @@ const options = {
     openapi: "3.0.0",
     info: {
       title: "API Documentation",
-      description: "Node API documentation",
+      description: "Node.js REST API Example CRUD documentation",
       version: "1.0.0",
       contact: {
         name: "Eduardo França",
@@ -42,7 +42,7 @@ const options = {
         },
         createUser: {
           type: "object",
-          required: ["name", "email", "password"],
+          required: ["name", "email", "password", "confirmPassword"],
           properties: {
             name: {
               type: "string",
