@@ -52,7 +52,7 @@ userSchema.pre("updateOne", async function (next) {
 
   if (user._update.password) {
     const salt = await genSalt(10);
-    const hashedPassword = await hash(user.password, salt);
+    const hashedPassword = await hash(user._update.password, salt);
     user._update.password = hashedPassword;
   }
 
